@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:got_space/bloc/MainBloc.dart';
 import 'package:got_space/pages/tabs/SchoolTab.dart';
 
 class MainPage extends StatefulWidget {
@@ -14,7 +16,7 @@ class _MainPageState extends State<MainPage> {
   List<Widget> widgets = [SchoolTab()];
   int index = 0;
 
-  Widget dropDown() => Column(
+  Widget dropDown(List<String> schools) => Column(
     children: schools.map<Container>((String value) {
       return Container(
         child: FlatButton(
@@ -38,53 +40,57 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Padding(
-              padding: EdgeInsets.only(left:35),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(schools[index]),
-                  IconButton(
-                    icon: Icon(
-                      expand ? Icons.arrow_upward : Icons.arrow_downward,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        expand = !expand;
-                      });
-                    },
-                  )
-                ],
-              )),
-          actions: <Widget>[
-            PopupMenuButton(
-              child: Padding(
-                child: Icon(Icons.more_horiz),
-                padding: EdgeInsets.only(right: 10),
-              ),
-              itemBuilder: (BuildContext context) {
-                return [
-                  PopupMenuItem(
-                    child: Text("Change Default School"),
-                  )
-                ];
-              },
-            )
-          ],
-        ),
-        body: Column(
-          children: <Widget>[
-            Visibility(
-              child: dropDown(),
-              visible: expand,
+    return BlocBuilder<MainBloc, List<String>>(
+      builder: (context, state){
+        widgets = state.map((e)=>SchoolTab()).toList();
+        return Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              title: Padding(
+                  padding: EdgeInsets.only(left:35),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(state[index]),
+                      IconButton(
+                        icon: Icon(
+                          expand ? Icons.arrow_upward : Icons.arrow_downward,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            expand = !expand;
+                          });
+                        },
+                      )
+                    ],
+                  )),
+              actions: <Widget>[
+                PopupMenuButton(
+                  child: Padding(
+                    child: Icon(Icons.more_horiz),
+                    padding: EdgeInsets.only(right: 10),
+                  ),
+                  itemBuilder: (BuildContext context) {
+                    return [
+                      PopupMenuItem(
+                        child: Text("Change Default School"),
+                      )
+                    ];
+                  },
+                )
+              ],
             ),
-            widgets[index]
-          ],
-        )
-    );
+            body: ListView(
+              children: <Widget>[
+                Visibility(
+                  child: dropDown(state),
+                  visible: expand,
+                ),
+                widgets[index]
+              ],
+            )
+        );
+      });
   }
 }

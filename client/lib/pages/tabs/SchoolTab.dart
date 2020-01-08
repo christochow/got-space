@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:got_space/Repositories/FirebaseRepository.dart';
+import 'package:got_space/bloc/SchoolBloc.dart';
+import 'package:got_space/client/FirebaseClient.dart';
 import 'package:got_space/pages/tabs/LibraryList.dart';
 
 class SchoolTab extends StatefulWidget {
@@ -14,10 +18,9 @@ class _SchoolTabState extends State<SchoolTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-          child: LibraryList()
-          ),
-        );
+    return BlocProvider(
+      create: (BuildContext context) => SchoolBloc(FirebaseRepository(FirebaseClient())),
+      child: LibraryList(),
+    );
   }
 }
