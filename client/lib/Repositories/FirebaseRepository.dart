@@ -10,6 +10,8 @@ class FirebaseRepository {
 
   Future<List<String>> getSchools() async {
     QuerySnapshot snapshot =  await firebaseClient.getSchools();
-    return snapshot.documents.map((e)=>e.documentID);
+    var a =  snapshot.documents.map((e)=>e.documentID).toList();
+    print(a);
+    return a;
   }
 }
