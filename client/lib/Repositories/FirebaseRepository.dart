@@ -9,7 +9,12 @@ class FirebaseRepository {
   }
 
   Future<List<String>> getSchools() async {
+    try{
     QuerySnapshot snapshot =  await firebaseClient.getSchools();
     return snapshot.documents.map((e)=>e.documentID).toList();
+    } catch(e){
+      print(e);
+      return null;
+    }
   }
 }

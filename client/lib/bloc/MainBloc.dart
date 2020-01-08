@@ -15,7 +15,7 @@ class MainBloc extends Bloc<String, List<String>>{
   }
 
   @override
-  List<String> get initialState => ['University Of '];
+  List<String> get initialState => [];
 
  @override
   Stream<List<String>> mapEventToState(String event) async*{
