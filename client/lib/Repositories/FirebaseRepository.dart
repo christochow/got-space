@@ -17,4 +17,8 @@ class FirebaseRepository {
       return null;
     }
   }
+
+  Stream<DocumentSnapshot> getDataFromPath(String id){
+    return firebaseClient.getSchoolRatingReference(id);
+  }
 }
