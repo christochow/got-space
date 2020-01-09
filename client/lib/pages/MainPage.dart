@@ -55,7 +55,7 @@ class _MainPageState extends State<MainPage> {
           ),
         );
       }
-      widgets = state.map((e) => SchoolTab()).toList();
+      widgets = state.map((e) => SchoolTab(id: e)).toList();
       return Scaffold(
           appBar: AppBar(
             centerTitle: true,
