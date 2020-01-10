@@ -1,3 +1,1 @@
-enum BlocEventType{
-  ADD
-}
+enum BlocEventType { ADD, SUB }
