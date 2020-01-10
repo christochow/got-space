@@ -15,13 +15,12 @@ class SchoolTab extends StatefulWidget {
 }
 
 class _SchoolTabState extends State<SchoolTab> {
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) =>
-          SchoolBloc(FirebaseRepository(FirebaseClient()), widget.id),
-      child: LibraryList(),
+      create: (BuildContext context) => SchoolBloc(
+          FirebaseRepository(FirebaseClient()), widget.id, 'ratings'),
+      child: LibraryList(path: 'ratings/' + widget.id + '/libraries'),
     );
   }
 }
