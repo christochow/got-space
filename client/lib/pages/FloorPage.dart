@@ -8,29 +8,28 @@ import 'package:got_space/bloc/SchoolBloc.dart';
 import 'package:got_space/bloc/SubSectionBloc.dart';
 import 'package:got_space/client/FirebaseClient.dart';
 import 'package:got_space/models/BlocState.dart';
-import 'package:got_space/pages/FloorPage.dart';
 
-class LibraryPage extends StatefulWidget {
-  LibraryPage({Key key, this.libBloc, this.path}) : super(key: key);
-  final LibraryBloc libBloc;
+class FloorPage extends StatefulWidget {
+  FloorPage({Key key, this.subSecBloc, this.path}) : super(key: key);
+  final SubSectionBloc subSecBloc;
   final String path;
 
   @override
-  _LibraryPageState createState() => _LibraryPageState();
+  _FloorPageState createState() => _FloorPageState();
 }
 
-class _LibraryPageState extends State<LibraryPage> {
+class _FloorPageState extends State<FloorPage> {
   Stream<BlocState> _stream;
 
   @override
   void initState() {
-    _stream = widget.libBloc.asBroadcastStream();
+    _stream = widget.subSecBloc.asBroadcastStream();
     super.initState();
   }
 
   @override
   void dispose() {
-    widget.libBloc.close();
+    widget.subSecBloc.close();
     super.dispose();
   }
 
@@ -55,26 +54,23 @@ class _LibraryPageState extends State<LibraryPage> {
                       state.data.snapshot.data['rating'].toString())
                 ],
                 state.data.subSections.map((e) {
-                  SubSectionBloc _subSectionBloc = SubSectionBloc(
-                      FirebaseRepository(FirebaseClient()),
-                      e.documentID,
-                      'widget.path' + '/floors/');
                   return BlocProvider<SubSectionBloc>(
-                    create: (context) => _subSectionBloc,
+                    create: (context) =>
+                        SubSectionBloc(
+                            FirebaseRepository(FirebaseClient()),
+                            e.documentID,
+                            'widget.path' + '/floors/'),
                     child: FlatButton(
                       child: Text(e.documentID + ':' + e.data['rating']),
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FloorPage(
-                                      subSecBloc: _subSectionBloc,
-                                    )));
+//                        Navigator.push(context,
+//                            MaterialPageRoute(
+//                                builder: (context) => ()));
                       },
                     ),
                   );
                 }).toList()
-              ].expand((e) => e).toList(),
+              ].expand((e)=>e).toList(),
             ));
       },
     );
