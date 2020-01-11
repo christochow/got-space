@@ -29,7 +29,6 @@ class _FloorPageState extends State<FloorPage> {
 
   @override
   void dispose() {
-    widget.subSecBloc.close();
     super.dispose();
   }
 

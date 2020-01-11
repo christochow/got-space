@@ -30,7 +30,6 @@ class _LibraryPageState extends State<LibraryPage> {
 
   @override
   void dispose() {
-    widget.libBloc.close();
     super.dispose();
   }
 
