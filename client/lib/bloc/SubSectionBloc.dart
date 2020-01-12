@@ -8,17 +8,11 @@ import 'package:got_space/models/BlocState.dart';
 
 class SubSectionBloc extends Bloc<BlocEvent, BlocState> {
   FirebaseRepository _firebaseRepository;
-  StreamSubscription _subscription;
 
   SubSectionBloc(FirebaseRepository repo, String id, String path) {
     _firebaseRepository = repo;
-    _subscription =
-        _firebaseRepository.getDataFromPath(path, id).listen((snapshot) {
-      this.add(BlocEvent(BlocEventType.ADD, snapshot, null));
-    });
   }
 
-  StreamSubscription get subscription => _subscription;
 
   @override
   BlocState get initialState => BlocState(null, []);
@@ -32,7 +26,6 @@ class SubSectionBloc extends Bloc<BlocEvent, BlocState> {
 
   @override
   Future<void> close() {
-    _subscription?.cancel();
     return super.close();
   }
 }

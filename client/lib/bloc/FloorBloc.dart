@@ -8,27 +8,23 @@ import 'package:got_space/models/BlocState.dart';
 
 class FloorBloc extends Bloc<BlocEvent, BlocState> {
   FirebaseRepository _firebaseRepository;
-  StreamSubscription _subscription;
   StreamSubscription _subscription2;
 
-  FloorBloc(FirebaseRepository repo, String id, String path) {
+  FloorBloc(FirebaseRepository repo, String id, String path, bool hasChild) {
     _firebaseRepository = repo;
-    _subscription =
-        _firebaseRepository.getDataFromPath(path, id).listen((snapshot) {
-          this.add(BlocEvent(BlocEventType.ADD, snapshot, null));
-          _subscribetoSub(path, id);
-        });
+    if(hasChild==true){
+      _subscribetoSub(path, id);
+    }
   }
 
   void _subscribetoSub(String path, String id){
     _subscription2 = _firebaseRepository
-        .getCollectionFromPath(path, id + '/floors')
+        .getCollectionFromPath(path, id + '/subsections')
         .listen((snapshot) {
       this.add(BlocEvent(BlocEventType.SUB, null, snapshot.documents));
     });
   }
 
-  StreamSubscription get subscription => _subscription;
 
   @override
   BlocState get initialState => BlocState(null, []);
@@ -44,7 +40,6 @@ class FloorBloc extends Bloc<BlocEvent, BlocState> {
 
   @override
   Future<void> close() {
-    _subscription?.cancel();
     _subscription2?.cancel();
     return super.close();
   }
