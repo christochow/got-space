@@ -24,7 +24,7 @@ class _LibraryListState extends State<LibraryList> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext rootContext) {
     return BlocBuilder<SchoolBloc, BlocState>(
       builder: (context, state) {
         if (state.snapshot == null) {
@@ -34,7 +34,7 @@ class _LibraryListState extends State<LibraryList> {
           shrinkWrap: true,
           children: state.subSections.map((e) {
             LibraryBloc _bloc = LibraryBloc(FirebaseRepository(FirebaseClient()),
-                e.documentID, widget.path);
+                e.documentID, widget.path, e.data['hasChild']);
             return BlocProvider<LibraryBloc>(
               create: (context) => _bloc,
               child: FlatButton(
@@ -45,6 +45,8 @@ class _LibraryListState extends State<LibraryList> {
                       MaterialPageRoute(
                           builder: (context) => LibraryPage(
                               libBloc: _bloc,
+                              schoolBloc: BlocProvider.of<SchoolBloc>(rootContext),
+                              id: e.documentID,
                               path: widget.path + '/' + e.documentID + '/floors')));
                 },
               ),
