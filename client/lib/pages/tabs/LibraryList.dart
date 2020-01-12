@@ -45,7 +45,7 @@ class _LibraryListState extends State<LibraryList> {
                       MaterialPageRoute(
                           builder: (context) => LibraryPage(
                               libBloc: _bloc,
-                              path: widget.path + '/' + e.documentID)));
+                              path: widget.path + '/' + e.documentID + '/floors')));
                 },
               ),
             );

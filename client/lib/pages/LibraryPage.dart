@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:got_space/Repositories/FirebaseRepository.dart';
+import 'package:got_space/bloc/FloorBloc.dart';
 import 'package:got_space/bloc/LibraryBloc.dart';
 import 'package:got_space/bloc/SchoolBloc.dart';
 import 'package:got_space/bloc/SubSectionBloc.dart';
@@ -54,12 +55,12 @@ class _LibraryPageState extends State<LibraryPage> {
                       state.data.snapshot.data['rating'].toString())
                 ],
                 state.data.subSections.map((e) {
-                  SubSectionBloc _subSectionBloc = SubSectionBloc(
+                  FloorBloc _floorBloc = FloorBloc(
                       FirebaseRepository(FirebaseClient()),
                       e.documentID,
-                      'widget.path' + '/floors/');
-                  return BlocProvider<SubSectionBloc>(
-                    create: (context) => _subSectionBloc,
+                      widget.path);
+                  return BlocProvider<FloorBloc>(
+                    create: (context) => _floorBloc,
                     child: FlatButton(
                       child: Text(e.documentID + ':' + e.data['rating']),
                       onPressed: () {
@@ -67,7 +68,8 @@ class _LibraryPageState extends State<LibraryPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => FloorPage(
-                                      subSecBloc: _subSectionBloc,
+                                      floorBloc: _floorBloc,
+                                  path: widget.path + '/' + e.documentID + '/subsections',
                                     )));
                       },
                     ),
