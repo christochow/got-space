@@ -6,7 +6,8 @@ import 'package:got_space/bloc/SubSectionBloc.dart';
 import 'package:got_space/models/BlocState.dart';
 
 class SubSectionPage extends StatefulWidget {
-  SubSectionPage({Key key, this.subSecBloc, this.floorBloc, this.id}) : super(key: key);
+  SubSectionPage({Key key, this.subSecBloc, this.floorBloc, this.id})
+      : super(key: key);
   final SubSectionBloc subSecBloc;
   final FloorBloc floorBloc;
   final String id;
@@ -16,7 +17,6 @@ class SubSectionPage extends StatefulWidget {
 }
 
 class _SubSectionPageState extends State<SubSectionPage> {
-
   @override
   void initState() {
     super.initState();
@@ -28,12 +28,15 @@ class _SubSectionPageState extends State<SubSectionPage> {
     super.dispose();
   }
 
+  _showInputDialog() {}
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FloorBloc, BlocState>(
       bloc: widget.floorBloc,
       builder: (BuildContext context, BlocState state) {
-        DocumentSnapshot snapshot = state.subSections.firstWhere((e)=>e.documentID==widget.id);
+        DocumentSnapshot snapshot =
+            state.subSections.firstWhere((e) => e.documentID == widget.id);
         if (snapshot == null) {
           return Center(
             child: Text('Loading'),
@@ -43,9 +46,16 @@ class _SubSectionPageState extends State<SubSectionPage> {
             appBar: AppBar(
               title: Text(snapshot.documentID),
             ),
-            body: Center(
-              child: Text(
-                  'Rating: ' + snapshot.data['rating'].toString()),
+            body: ListView(
+              children: <Widget>[
+                Center(
+                  child: Text('Rating: ' + snapshot.data['rating'].toString()),
+                ),
+                FlatButton(
+                  child: Text('Submit a rating'),
+                  onPressed: _showInputDialog,
+                )
+              ],
             ));
       },
     );

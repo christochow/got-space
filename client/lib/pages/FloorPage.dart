@@ -33,6 +33,8 @@ class _FloorPageState extends State<FloorPage> {
     super.dispose();
   }
 
+  _showInputDialog() {}
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LibraryBloc, BlocState>(
@@ -60,6 +62,14 @@ class _FloorPageState extends State<FloorPage> {
                           Text('Rating: ' + snapshot.data['rating'].toString()),
                     )
                   ],
+                  snapshot.data['hasChild'] == false
+                      ? [
+                          FlatButton(
+                            child: Text('Submit a rating'),
+                            onPressed: _showInputDialog,
+                          )
+                        ]
+                      : [],
                   state.subSections.map((e) {
                     SubSectionBloc _bloc = SubSectionBloc(
                         FirebaseRepository(FirebaseClient()),
