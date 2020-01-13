@@ -3,11 +3,82 @@ const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
+const readSchool = async (name) => {
+    let libraries = await db.collection('records').doc(name).collection('libraries').get();
+    libraries.docs.forEach(e => readLibraries(e.ref.path, e));
+};
+
+const readLibraries = async (name, snapshot) => {
+    if (snapshot.data()['hasChild'] === true) {
+        let floors = await db.doc(name).collection('floors').get();
+        let promises = [];
+        for (let i=0;i<floors.docs.length;i++) {
+            let e = floors.docs[i];
+            promises.push(readFloors(e.ref.path, e));
+        }
+        await Promise.all(promises);
+        name = name.split('/');
+        name[0] = 'ratings';
+        name = name.join('/');
+        await db.runTransaction(t => {
+            return t.get(db.doc(name).collection('floors')).then(snapshot => {
+                let s = snapshot.docs.map(e => e.data()['rating']);
+                return db.doc(name).update({
+                    rating: s.reduce((accu, cur) => accu + cur, 0)
+                });
+            });
+        });
+    }
+};
+
+const readFloors = async (name, snapshot) => {
+    if (snapshot.data()['hasChild'] === true) {
+        let subsections = await db.doc(name).collection('subsections').get();
+        let promises = [];
+        for (let i=0;i<subsections.docs.length;i++) {
+            let e = subsections.docs[i];
+            promises.push(runTransaction(e.ref.path));
+        }
+        //wait for process to finish
+        await Promise.all(promises);
+        name = name.split('/');
+        name[0] = 'ratings';
+        name = name.join('/');
+        await db.runTransaction(t => {
+            return t.get(db.doc(name).collection('subsections')).then(snapshot => {
+                let s = snapshot.docs.map(e => e.data()['rating']);
+                return db.doc(name).update({
+                    rating: s.reduce((accu, cur) => accu + cur, 0)
+                });
+            });
+        });
+    } else {
+        await runTransaction(name);
+    }
+};
+
+const runTransaction = async (name) => {
+    let date = Date.now() - 60 * 60 * 1000;
+     await db.runTransaction(t => {
+        return t.get(db.doc(name).collection('records')
+            // .where('timestamp', '>=', date)
+        ).then(snapshot => {
+            let s = snapshot.docs.map(e => e.data()['rating']);
+            name = name.split('/');
+            name[0] = 'ratings';
+            name = name.join('/');
+            return db.doc(name).update({
+                rating: s.reduce((accu, cur) => accu + cur, 0)
+            });
+        });
+    });
+};
+
+
 exports.getSchools = functions.https.onRequest(async (request, response) => {
- const data = await db.collection('schools').get();
- response.send(JSON.stringify(data.docs.map(e=>e.id)));
+    const data = await db.collection('schools').get();
+    let schools = data.docs.map(e => e.id);
+    schools.forEach(e => readSchool(e));
+    response.send(JSON.stringify(schools));
 });
 
