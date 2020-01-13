@@ -12,4 +12,8 @@ class FirebaseClient {
   Stream<QuerySnapshot> getSubSections(String id) {
     return Firestore.instance.collection(id).snapshots();
   }
+
+  Future<DocumentReference> addToCollection(String path, Map<String, dynamic> data){
+    return Firestore.instance.collection(path).add(data);
+  }
 }
