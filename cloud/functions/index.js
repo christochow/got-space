@@ -25,7 +25,7 @@ const readLibraries = async (name, snapshot) => {
                 let s = snapshot.docs.map(e => e.data()['rating']);
                 let total = snapshot.docs.length === 0 ? 1 : snapshot.docs.length;
                 return db.doc(name).update({
-                    rating: Math.round(s.reduce((accu, cur) => accu + cur, 0)*10/total)/10
+                    rating: Math.round(s.reduce((accu, cur) => accu + cur, 0) * 10 / total) / 10
                 });
             });
         });
@@ -50,7 +50,7 @@ const readFloors = async (name, snapshot) => {
                 let s = snapshot.docs.map(e => e.data()['rating']);
                 let total = snapshot.docs.length === 0 ? 1 : snapshot.docs.length;
                 return db.doc(name).update({
-                    rating: Math.round(s.reduce((accu, cur) => accu + cur, 0)*10/total)/10
+                    rating: Math.round(s.reduce((accu, cur) => accu + cur, 0) * 10 / total) / 10
                 });
             });
         });
@@ -62,8 +62,7 @@ const readFloors = async (name, snapshot) => {
 const runTransaction = async (name) => {
     let date = Date.now() - 60 * 60 * 1000;
     await db.runTransaction(t => {
-        return t.get(db.doc(name).collection('records')
-            // .where('timestamp', '>=', date)
+        return t.get(db.doc(name).collection('records').where('timestamp', '>=', date)
         ).then(snapshot => {
             let s = snapshot.docs.map(e => e.data()['rating']);
             let total = snapshot.docs.length === 0 ? 1 : snapshot.docs.length;
@@ -71,7 +70,7 @@ const runTransaction = async (name) => {
             name[0] = 'ratings';
             name = name.join('/');
             return db.doc(name).update({
-                rating: Math.round(s.reduce((accu, cur) => accu + cur, 0)*10/total)/10
+                rating: Math.round(s.reduce((accu, cur) => accu + cur, 0) * 10 / total) / 10
             });
         });
     });
