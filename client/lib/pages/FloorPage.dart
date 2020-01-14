@@ -81,6 +81,10 @@ class _FloorPageState extends State<FloorPage> {
                                   return null;
                                 },
                                 onSaved: (value) {
+                                  List<String> pathList = path.split('/');
+                                  pathList[0] = 'records';
+                                  pathList.add('records');
+                                  path = pathList.join('/');
                                   _bloc.add(InputEvent(path, num.parse(value)));
                                   Navigator.of(parentCtx).pop();
                                   _bloc
@@ -113,10 +117,6 @@ class _FloorPageState extends State<FloorPage> {
                       FlatButton(
                         child: new Text('Submit'),
                         onPressed: () {
-                          List<String> pathList = path.split('/');
-                          pathList[0] = 'records';
-                          pathList.add('records');
-                          path = pathList.join('/');
                           if (_formKey.currentState.validate()) {
                             _formKey.currentState.save();
                           }
