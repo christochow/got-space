@@ -149,7 +149,7 @@ exports.delSchools = functions.https.onRequest(async (request, response) => {
 });
 
 exports.updateRatings = functions.pubsub
-    .schedule('30 * * * *')
+    .schedule('*/15 * * * *')
     .timeZone('America/New_York')
     .onRun(startCalculate);
 
