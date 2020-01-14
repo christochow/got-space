@@ -55,25 +55,24 @@ class _SubSectionPageState extends State<SubSectionPage> {
                   return AlertDialog(
                     title: Text('Submit a rating'),
                     content: Container(
-                      height: height*0.25,
-                      width: width*0.75,
+                      height: height * 0.25,
+                      width: width * 0.75,
                       child: ListView(
                         children: <Widget>[
-                          Text(
-                              'Enter a number from 1 to 10\n1 means there ' +
-                                  'is no one in the area.\n10 means the area ' +
-                                  'is full'),
+                          Text('Enter a number from 0 to 10\n0 means there ' +
+                              'is no one in the area.\n10 means the area ' +
+                              'is full'),
                           Form(
                             key: _formKey,
                             child: TextFormField(
-                                initialValue: '1',
+                                initialValue: '0',
                                 validator: (value) {
                                   if (value.isEmpty) {
                                     return 'Field must not be empty!';
                                   }
                                   var n = num.parse(value);
-                                  if (n < 1 || n > 10) {
-                                    return 'Input must be between 1 to 10!';
+                                  if (n < 0 || n > 10) {
+                                    return 'Input must be between 0 to 10!';
                                   }
                                   return null;
                                 },
@@ -102,7 +101,8 @@ class _SubSectionPageState extends State<SubSectionPage> {
                                 ]),
                           )
                         ],
-                      ),),
+                      ),
+                    ),
                     actions: <Widget>[
                       FlatButton(
                           child: new Text('Cancel'),
