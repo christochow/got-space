@@ -3,17 +3,17 @@ const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
 
-const readSchool = async (name) => {
+const calSchool = async (name) => {
     let libraries = await db.collection('records').doc(name).collection('libraries').get();
-    libraries.docs.forEach(e => readLibraries(e.ref.path));
+    libraries.docs.forEach(e => calcLibraries(e.ref.path));
 };
 
-const readLibraries = async (name) => {
+const calcLibraries = async (name) => {
     let floors = await db.doc(name).collection('floors').get();
     let promises = [];
     for (let i = 0; i < floors.docs.length; i++) {
         let e = floors.docs[i];
-        promises.push(readFloors(e.ref.path, e));
+        promises.push(calcFloors(e.ref.path, e));
     }
     await Promise.all(promises);
     name = name.split('/');
@@ -30,13 +30,13 @@ const readLibraries = async (name) => {
     });
 };
 
-const readFloors = async (name, snapshot) => {
+const calcFloors = async (name, snapshot) => {
     if (snapshot.data()['hasChild'] === true) {
         let subsections = await db.doc(name).collection('subsections').get();
         let promises = [];
         for (let i = 0; i < subsections.docs.length; i++) {
             let e = subsections.docs[i];
-            promises.push(runTransaction(e.ref.path));
+            promises.push(runCalcTransaction(e.ref.path));
         }
         //wait for process to finish
         await Promise.all(promises);
@@ -53,11 +53,11 @@ const readFloors = async (name, snapshot) => {
             });
         });
     } else {
-        await runTransaction(name);
+        await runCalcTransaction(name);
     }
 };
 
-const runTransaction = async (name) => {
+const runCalcTransaction = async (name) => {
     let date = Date.now() - 60 * 60 * 1000;
     await db.runTransaction(t => {
         return t.get(db.doc(name).collection('records').where('timestamp', '>=', date)
@@ -124,7 +124,7 @@ startCalculate = async () => {
     const data = await db.collection('schools').get();
     let promises = [];
     for(let i=0;i<data.docs.length;i++){
-        promises.push(readSchool(data.docs[i].id))
+        promises.push(calSchool(data.docs[i].id))
     }
     await Promise.all(promises);
 };
@@ -138,7 +138,7 @@ startDelete = async () => {
     await Promise.all(promises);
 };
 
-exports.calSchools = functions.https.onRequest(async (request, response) => {
+exports.calcSchools = functions.https.onRequest(async (request, response) => {
     await startCalculate();
     response.send('calculate ratings done');
 });
