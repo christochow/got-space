@@ -12,7 +12,7 @@ const readLibraries = async (name, snapshot) => {
     if (snapshot.data()['hasChild'] === true) {
         let floors = await db.doc(name).collection('floors').get();
         let promises = [];
-        for (let i=0;i<floors.docs.length;i++) {
+        for (let i = 0; i < floors.docs.length; i++) {
             let e = floors.docs[i];
             promises.push(readFloors(e.ref.path, e));
         }
@@ -23,8 +23,9 @@ const readLibraries = async (name, snapshot) => {
         await db.runTransaction(t => {
             return t.get(db.doc(name).collection('floors')).then(snapshot => {
                 let s = snapshot.docs.map(e => e.data()['rating']);
+                let total = snapshot.docs.length === 0 ? 1 : snapshot.docs.length;
                 return db.doc(name).update({
-                    rating: s.reduce((accu, cur) => accu + cur, 0)
+                    rating: (Math.round(s.reduce((accu, cur) => accu + cur, 0)*10/total)/10).toFixed(1)
                 });
             });
         });
@@ -35,7 +36,7 @@ const readFloors = async (name, snapshot) => {
     if (snapshot.data()['hasChild'] === true) {
         let subsections = await db.doc(name).collection('subsections').get();
         let promises = [];
-        for (let i=0;i<subsections.docs.length;i++) {
+        for (let i = 0; i < subsections.docs.length; i++) {
             let e = subsections.docs[i];
             promises.push(runTransaction(e.ref.path));
         }
@@ -47,8 +48,9 @@ const readFloors = async (name, snapshot) => {
         await db.runTransaction(t => {
             return t.get(db.doc(name).collection('subsections')).then(snapshot => {
                 let s = snapshot.docs.map(e => e.data()['rating']);
+                let total = snapshot.docs.length === 0 ? 1 : snapshot.docs.length;
                 return db.doc(name).update({
-                    rating: s.reduce((accu, cur) => accu + cur, 0)
+                    rating: (Math.round(s.reduce((accu, cur) => accu + cur, 0)*10/total)/10).toFixed(1)
                 });
             });
         });
@@ -59,16 +61,17 @@ const readFloors = async (name, snapshot) => {
 
 const runTransaction = async (name) => {
     let date = Date.now() - 60 * 60 * 1000;
-     await db.runTransaction(t => {
+    await db.runTransaction(t => {
         return t.get(db.doc(name).collection('records')
             // .where('timestamp', '>=', date)
         ).then(snapshot => {
             let s = snapshot.docs.map(e => e.data()['rating']);
+            let total = snapshot.docs.length === 0 ? 1 : snapshot.docs.length;
             name = name.split('/');
             name[0] = 'ratings';
             name = name.join('/');
             return db.doc(name).update({
-                rating: s.reduce((accu, cur) => accu + cur, 0)
+                rating: (Math.round(s.reduce((accu, cur) => accu + cur, 0)*10/total)/10).toFixed(1)
             });
         });
     });
