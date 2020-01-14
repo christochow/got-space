@@ -22,9 +22,9 @@ class InputBloc extends Bloc<InputEvent, String> {
           'rating': event.rating,
           'timestamp':DateTime.now().millisecondsSinceEpoch
         });
-    yield 'sucess';
+    yield 'Rating added!';
     }catch(e){
-      yield 'error';
+      yield 'Something went wrong, please try again';
     }
   }
 }
