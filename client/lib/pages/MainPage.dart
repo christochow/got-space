@@ -23,7 +23,8 @@ class _MainPageState extends State<MainPage> {
               child: Center(
                 child: Text(
                   value,
-                  style: TextStyle(color: Colors.white, fontSize: 17),
+                  style: TextStyle(
+                      color: Theme.of(context).backgroundColor, fontSize: 17),
                 ),
               ),
               onPressed: () {
@@ -33,7 +34,7 @@ class _MainPageState extends State<MainPage> {
                 });
               },
             ),
-            decoration: BoxDecoration(color: Colors.indigo),
+            decoration: BoxDecoration(color: Theme.of(context).primaryColor),
           );
         }).toList(),
       );
@@ -68,7 +69,7 @@ class _MainPageState extends State<MainPage> {
                     IconButton(
                       icon: Icon(
                         expand ? Icons.arrow_upward : Icons.arrow_downward,
-                        color: Colors.white,
+                        color: Theme.of(context).backgroundColor,
                       ),
                       onPressed: () {
                         setState(() {
