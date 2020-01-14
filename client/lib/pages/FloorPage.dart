@@ -58,8 +58,9 @@ class _FloorPageState extends State<FloorPage> {
                 children: [
                   [
                     Center(
-                      child:
-                          Text('Rating: ' + snapshot.data['rating'].toString()),
+                      child: Text('Rating: ' +
+                          num.parse(snapshot.data['rating'].toString())
+                              .toStringAsFixed(1)),
                     )
                   ],
                   snapshot.data['hasChild'] == false
@@ -78,8 +79,10 @@ class _FloorPageState extends State<FloorPage> {
                     return BlocProvider<SubSectionBloc>(
                       create: (context) => _bloc,
                       child: FlatButton(
-                        child: Text(
-                            e.documentID + ':' + e.data['rating'].toString()),
+                        child: Text(e.documentID +
+                            ':' +
+                            num.parse(e.data['rating'].toString())
+                                .toStringAsFixed(1)),
                         onPressed: () {
                           Navigator.push(
                               context,

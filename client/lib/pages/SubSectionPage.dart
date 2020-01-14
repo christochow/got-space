@@ -49,7 +49,9 @@ class _SubSectionPageState extends State<SubSectionPage> {
             body: ListView(
               children: <Widget>[
                 Center(
-                  child: Text('Rating: ' + snapshot.data['rating'].toString()),
+                  child: Text('Rating: ' +
+                      num.parse(snapshot.data['rating'].toString())
+                          .toStringAsFixed(1)),
                 ),
                 FlatButton(
                   child: Text('Submit a rating'),

@@ -57,7 +57,8 @@ class _LibraryPageState extends State<LibraryPage> {
                         [
                           Center(
                               child: Text('Rating: ' +
-                                  snapshot.data['rating'].toString()))
+                                  num.parse(snapshot.data['rating'].toString())
+                                      .toStringAsFixed(1)))
                         ],
                         state.subSections.map((e) {
                           FloorBloc _floorBloc = FloorBloc(
@@ -70,7 +71,8 @@ class _LibraryPageState extends State<LibraryPage> {
                             child: FlatButton(
                               child: Text(e.documentID +
                                   ':' +
-                                  e.data['rating'].toString()),
+                                  num.parse(e.data['rating'].toString())
+                                      .toStringAsFixed(1)),
                               onPressed: () {
                                 Navigator.push(
                                     context,
