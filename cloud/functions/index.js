@@ -138,9 +138,9 @@ startDelete = async () => {
     await Promise.all(promises);
 };
 
-exports.getSchools = functions.https.onRequest(async (request, response) => {
+exports.calSchools = functions.https.onRequest(async (request, response) => {
     await startCalculate();
-    response.send('calcualte ratings done');
+    response.send('calculate ratings done');
 });
 
 exports.delSchools = functions.https.onRequest(async (request, response) => {
