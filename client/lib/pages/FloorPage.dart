@@ -11,6 +11,7 @@ import 'package:got_space/client/FirebaseClient.dart';
 import 'package:got_space/models/BlocState.dart';
 import 'package:got_space/models/InputEvent.dart';
 import 'package:got_space/pages/SubSectionPage.dart';
+import 'package:got_space/widgets/InputDialog.dart';
 
 class FloorPage extends StatefulWidget {
   FloorPage({Key key, this.floorBloc, this.path, this.libraryBloc, this.id})
@@ -38,94 +39,20 @@ class _FloorPageState extends State<FloorPage> {
     super.dispose();
   }
 
-  _displaySnackBar(BuildContext context, String msg) {
-    final snackBar = SnackBar(content: Text(msg));
-    Scaffold.of(context).showSnackBar(snackBar);
-  }
-
   _showInputDialog(String path, BuildContext rootContext) {
-    double height = MediaQuery.of(rootContext).size.height;
-    double width = MediaQuery.of(rootContext).size.width;
+    Size size = MediaQuery.of(rootContext).size;
+    double height = size.height;
+    double width = size.width;
     return showDialog(
         context: context,
         builder: (parentCtx) {
-          return BlocProvider<InputBloc>(
-              create: (context) =>
-                  InputBloc(FirebaseRepository(FirebaseClient())),
-              child: BlocBuilder<InputBloc, String>(
-                builder: (BuildContext context, String state) {
-                  InputBloc _bloc = BlocProvider.of<InputBloc>(context);
-                  return AlertDialog(
-                    title: Text('Submit a rating'),
-                    content: Container(
-                      height: height * 0.25,
-                      width: width * 0.75,
-                      child: ListView(
-                        children: <Widget>[
-                          Text('Enter a number from 0 to 10\n0 means there ' +
-                              'is no one in the area.\n10 means the area ' +
-                              'is full'),
-                          Form(
-                            key: _formKey,
-                            child: TextFormField(
-                                initialValue: '0',
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'Field must not be empty!';
-                                  }
-                                  var n = num.parse(value);
-                                  if (n < 0 || n > 10) {
-                                    return 'Input must be between 0 to 10!';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) {
-                                  List<String> pathList = path.split('/');
-                                  pathList[0] = 'records';
-                                  pathList.add('records');
-                                  path = pathList.join('/');
-                                  _bloc.add(InputEvent(path, num.parse(value)));
-                                  Navigator.of(parentCtx).pop();
-                                  _bloc
-                                      .asBroadcastStream()
-                                      .listen((String state) {
-                                    if (state != '') {
-                                      _bloc.close();
-                                      _formKey.currentState?.reset();
-                                      _displaySnackBar(rootContext, state);
-                                    }
-                                  });
-                                },
-                                keyboardType: TextInputType.numberWithOptions(
-                                    signed: false, decimal: false),
-                                decoration: InputDecoration(),
-                                inputFormatters: [
-                                  WhitelistingTextInputFormatter.digitsOnly
-                                ]),
-                          )
-                        ],
-                      ),
-                    ),
-                    actions: <Widget>[
-                      FlatButton(
-                          child: new Text('Cancel'),
-                          onPressed: () {
-                            _bloc.close();
-                            _formKey.currentState.reset();
-                            Navigator.of(parentCtx).pop();
-                          }),
-                      FlatButton(
-                        child: new Text('Submit'),
-                        onPressed: () {
-                          if (_formKey.currentState.validate()) {
-                            _formKey.currentState.save();
-                          }
-                        },
-                      )
-                    ],
-                  );
-                },
-              ));
+          return InputDialog(
+            path: path,
+            formKey: _formKey,
+            height: height*0.25,
+            width: width*0.75,
+            rootContext: rootContext,
+          );
         });
   }
 
