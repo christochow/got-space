@@ -12,9 +12,8 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Got Space?',
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-      ),
+      theme:
+          ThemeData(primaryColor: Colors.indigo, backgroundColor: Colors.white),
       home: BlocProvider(
         create: (context) => MainBloc(FirebaseRepository(FirebaseClient())),
         child: MainPage(),
