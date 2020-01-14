@@ -61,16 +61,15 @@ class _FloorPageState extends State<FloorPage> {
                       child: Text('Rating: ' +
                           num.parse(snapshot.data['rating'].toString())
                               .toStringAsFixed(1)),
+                    ),
+                    Visibility(
+                      visible: !snapshot.data['hasChild'],
+                      child: FlatButton(
+                        child: Text('Submit a rating'),
+                        onPressed: _showInputDialog,
+                      ),
                     )
                   ],
-                  snapshot.data['hasChild'] == false
-                      ? [
-                          FlatButton(
-                            child: Text('Submit a rating'),
-                            onPressed: _showInputDialog,
-                          )
-                        ]
-                      : [],
                   state.subSections.map((e) {
                     SubSectionBloc _bloc = SubSectionBloc(
                         FirebaseRepository(FirebaseClient()),
