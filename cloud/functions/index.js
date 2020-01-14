@@ -120,7 +120,7 @@ const runDelTransaction = async (name) => {
     });
 };
 
-startRead = async () => {
+startCalculate = async () => {
     const data = await db.collection('schools').get();
     let promises = [];
     for(let i=0;i<data.docs.length;i++){
@@ -131,28 +131,27 @@ startRead = async () => {
 
 startDelete = async () => {
     const data = await db.collection('schools').get();
-    let schools = data.docs.map(e => e.id);
     let promises = [];
     for(let i=0;i<data.docs.length;i++){
-        promises.push(delSchoolRecords(schools[i].id))
+        promises.push(delSchoolRecords(data.docs[i].id))
     }
     await Promise.all(promises);
 };
 
 exports.getSchools = functions.https.onRequest(async (request, response) => {
-    await startRead();
-    response.send('read done');
+    await startCalculate();
+    response.send('calcualte ratings done');
 });
 
 exports.delSchools = functions.https.onRequest(async (request, response) => {
     await startDelete();
-    response.send('delete done')
+    response.send('delete old records done')
 });
 
 exports.updateRatings = functions.pubsub
     .schedule('30 * * * *')
     .timeZone('America/New_York')
-    .onRun(startRead);
+    .onRun(startCalculate);
 
 exports.delRecords = functions.pubsub
     .schedule('0 0 * * *')
