@@ -1,7 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:got_space/bloc/MainBloc.dart';
+import 'package:got_space/pages/DefaultSchoolPage.dart';
+import 'package:got_space/pages/QuestionsAndAnswersPage.dart';
 import 'package:got_space/pages/tabs/SchoolTab.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key key}) : super(key: key);
@@ -11,10 +16,31 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  bool expand = false;
-  List<String> schools = [''];
-  List<Widget> widgets = [Text('')];
-  int index = 0;
+  bool expand;
+  int index;
+  String defaultSchool;
+
+  @override
+  initState() {
+    expand = false;
+    index = -1;
+    getSharedPrefs();
+    super.initState();
+  }
+
+  getSharedPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey("default")) {
+      setState(() {
+        defaultSchool = prefs.getString("default");
+      });
+    }
+  }
+
+  setSharedPrefs(String school) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("default", school);
+  }
 
   Widget dropDown(List<String> schools) => Column(
         children: schools.map<Container>((String value) {
@@ -56,7 +82,13 @@ class _MainPageState extends State<MainPage> {
           ),
         );
       }
-      widgets = state.map((e) => SchoolTab(id: e)).toList();
+      int i = 0;
+      if (defaultSchool != null && index == -1) {
+        i = state.indexOf(defaultSchool);
+      } else if(index != -1){
+        i = index;
+      }
+      List<Widget> widgets = state.map((e) => SchoolTab(id: e)).toList();
       return Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -65,7 +97,7 @@ class _MainPageState extends State<MainPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(state[index]),
+                    Text(state[i]),
                     IconButton(
                       icon: Icon(
                         expand ? Icons.arrow_upward : Icons.arrow_downward,
@@ -88,7 +120,32 @@ class _MainPageState extends State<MainPage> {
                 itemBuilder: (BuildContext context) {
                   return [
                     PopupMenuItem(
-                      child: Text("Change Default School"),
+                      child: FlatButton(
+                        child: Text("Change Default School"),
+                        onPressed: () async{
+                          String school = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => DefaultSchoolPage(
+                                        schools: state,
+                                      )));
+                          if(state.contains(school)){
+                            setSharedPrefs(school);
+                          }
+                        },
+                      ),
+                    ),
+                    PopupMenuItem(
+                      child: FlatButton(
+                        child: Text("Q&A"),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      QuestionsAndAnswersPage()));
+                        },
+                      ),
                     )
                   ];
                 },
@@ -101,7 +158,7 @@ class _MainPageState extends State<MainPage> {
                 child: dropDown(state),
                 visible: expand,
               ),
-              widgets[index]
+              widgets[i]
             ],
           ));
     });
