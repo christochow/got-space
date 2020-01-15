@@ -54,9 +54,9 @@ class _MainPageState extends State<MainPage> {
         MaterialPageRoute(
             builder: (context) => DefaultSchoolPage(
                   schools: state,
-                  school: defaultSchool,
+                  school: defaultSchool == null ? state[0] : defaultSchool,
                 )));
-    if (state.contains(school)) {
+    if (state.contains(school) && school != defaultSchool) {
       setSharedPrefs(school);
     }
   }
@@ -106,6 +106,8 @@ class _MainPageState extends State<MainPage> {
         i = state.indexOf(defaultSchool);
       } else if (index != -1) {
         i = index;
+      } else if (defaultSchool == null) {
+        setSharedPrefs(state[0]);
       }
       List<Widget> widgets = state.map((e) => SchoolTab(id: e)).toList();
       return Scaffold(
