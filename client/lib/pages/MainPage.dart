@@ -38,6 +38,27 @@ class _MainPageState extends State<MainPage> {
   setSharedPrefs(String school) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("default", school);
+    setState(() {
+      defaultSchool = school;
+    });
+  }
+
+  goToQAndA(context) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => QuestionsAndAnswersPage()));
+  }
+
+  goToDefaultSchool(context, state) async {
+    String school = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => DefaultSchoolPage(
+                  schools: state,
+                  school: defaultSchool,
+                )));
+    if (state.contains(school)) {
+      setSharedPrefs(school);
+    }
   }
 
   Widget dropDown(List<String> schools) => Column(
@@ -83,7 +104,7 @@ class _MainPageState extends State<MainPage> {
       int i = 0;
       if (defaultSchool != null && index == -1) {
         i = state.indexOf(defaultSchool);
-      } else if(index != -1){
+      } else if (index != -1) {
         i = index;
       }
       List<Widget> widgets = state.map((e) => SchoolTab(id: e)).toList();
@@ -111,6 +132,13 @@ class _MainPageState extends State<MainPage> {
                 )),
             actions: <Widget>[
               PopupMenuButton(
+                onSelected: (option) {
+                  if (option.toString() == 'Q&A') {
+                    goToQAndA(context);
+                  } else {
+                    goToDefaultSchool(context, state);
+                  }
+                },
                 child: Padding(
                   child: Icon(Icons.more_horiz),
                   padding: EdgeInsets.only(right: 10),
@@ -118,32 +146,15 @@ class _MainPageState extends State<MainPage> {
                 itemBuilder: (BuildContext context) {
                   return [
                     PopupMenuItem(
-                      child: FlatButton(
-                        child: Text("Change Default School"),
-                        onPressed: () async{
-                          String school = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => DefaultSchoolPage(
-                                        schools: state,
-                                      )));
-                          if(state.contains(school)){
-                            setSharedPrefs(school);
-                          }
-                        },
-                      ),
+                      value: 'Change Default School',
+                      child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text('Change Default School')),
                     ),
                     PopupMenuItem(
-                      child: FlatButton(
-                        child: Text("Q&A"),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      QuestionsAndAnswersPage()));
-                        },
-                      ),
+                      value: 'Q&A',
+                      child: Align(
+                          alignment: Alignment.centerLeft, child: Text('Q&A')),
                     )
                   ];
                 },
