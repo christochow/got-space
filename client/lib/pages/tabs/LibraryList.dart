@@ -26,7 +26,9 @@ class _LibraryListState extends State<LibraryList> {
     return BlocBuilder<SchoolBloc, BlocState>(
       builder: (context, state) {
         if (state.snapshot == null) {
-          return Text('Loading');
+          return Center(
+            child: Text('Loading'),
+          );
         }
         return ListView(
           shrinkWrap: true,
