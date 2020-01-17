@@ -10,6 +10,8 @@ import 'package:got_space/client/FirebaseClient.dart';
 import 'package:got_space/models/BlocState.dart';
 import 'package:got_space/models/InputEvent.dart';
 import 'package:got_space/widgets/InputDialog.dart';
+import 'package:got_space/widgets/RatingWidget.dart';
+import 'package:got_space/widgets/RowWidget.dart';
 
 class SubSectionPage extends StatefulWidget {
   SubSectionPage({Key key, this.subSecBloc, this.floorBloc, this.id})
@@ -46,8 +48,8 @@ class _SubSectionPageState extends State<SubSectionPage> {
           return InputDialog(
             path: path,
             formKey: _formKey,
-            height: height*0.25,
-            width: width*0.75,
+            height: height * 0.25,
+            width: width * 0.75,
             rootContext: rootContext,
           );
         });
@@ -68,20 +70,29 @@ class _SubSectionPageState extends State<SubSectionPage> {
         return Scaffold(
             appBar: AppBar(
               title: Text(snapshot.documentID),
+              centerTitle: true,
             ),
             body: Builder(
                 builder: (context) => ListView(
                       children: <Widget>[
                         Center(
-                          child: Text('Rating: ' +
-                              num.parse(snapshot.data['rating'].toString())
-                                  .toStringAsFixed(1)),
+                            child: RatingWidget(
+                          e: snapshot,
+                        )),
+                        Padding(
+                          padding: EdgeInsets.all(20),
+                          child: ButtonTheme(
+                              buttonColor: Theme.of(context).primaryColor,
+                              child: RaisedButton(
+                                child: Text(
+                                  'Submit a rating',
+                                  style: TextStyle(
+                                      color: Theme.of(context).backgroundColor),
+                                ),
+                                onPressed: () => _showInputDialog(
+                                    snapshot.reference.path, context),
+                              )),
                         ),
-                        FlatButton(
-                          child: Text('Submit a rating'),
-                          onPressed: () => _showInputDialog(
-                              snapshot.reference.path, context),
-                        )
                       ],
                     )));
       },

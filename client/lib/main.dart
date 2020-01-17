@@ -13,7 +13,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Got Space?',
       theme:
-          ThemeData(primaryColor: Colors.indigo, backgroundColor: Colors.white),
+          ThemeData(primaryColor: Color.fromRGBO(0, 35, 102, 1), backgroundColor: Colors.white),
       home: BlocProvider(
         create: (context) => MainBloc(FirebaseRepository(FirebaseClient())),
         child: MainPage(),

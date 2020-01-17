@@ -8,6 +8,9 @@ import 'package:got_space/bloc/SchoolBloc.dart';
 import 'package:got_space/client/FirebaseClient.dart';
 import 'package:got_space/models/BlocState.dart';
 import 'package:got_space/pages/FloorPage.dart';
+import 'package:got_space/widgets/Heading.dart';
+import 'package:got_space/widgets/RatingWidget.dart';
+import 'package:got_space/widgets/RowWidget.dart';
 
 class LibraryPage extends StatefulWidget {
   LibraryPage({Key key, this.libBloc, this.path, this.schoolBloc, this.id})
@@ -51,45 +54,54 @@ class _LibraryPageState extends State<LibraryPage> {
                 return Scaffold(
                     appBar: AppBar(
                       title: Text(snapshot.documentID),
+                      centerTitle: true,
                     ),
                     body: ListView(
                       children: [
                         [
-                          Center(
-                              child: Text('Rating: ' +
-                                  num.parse(snapshot.data['rating'].toString())
-                                      .toStringAsFixed(1)))
+                          RatingWidget(e: snapshot),
+                          Divider(
+                            color: Theme
+                                .of(context)
+                                .primaryColor,
+                          ),
+                          Heading(header: 'Floors',)
                         ],
-                        state.subSections.map((e) {
+                        state.subSections
+                            .asMap()
+                            .map((i, e) {
                           FloorBloc _floorBloc = FloorBloc(
                               FirebaseRepository(FirebaseClient()),
                               e.documentID,
                               widget.path,
                               e.data['hasChild']);
-                          return BlocProvider<FloorBloc>(
-                            create: (context) => _floorBloc,
-                            child: FlatButton(
-                              child: Text(e.documentID +
-                                  ':' +
-                                  num.parse(e.data['rating'].toString())
-                                      .toStringAsFixed(1)),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => FloorPage(
-                                              floorBloc: _floorBloc,
-                                              libraryBloc: widget.libBloc,
-                                              id: e.documentID,
-                                              path: widget.path +
-                                                  '/' +
-                                                  e.documentID +
-                                                  '/subsections',
-                                            )));
-                              },
-                            ),
-                          );
-                        }).toList()
+                          return MapEntry(
+                              i,
+                              BlocProvider<FloorBloc>(
+                                create: (context) => _floorBloc,
+                                child: FlatButton(
+                                  child: RowWidget(e: e, i: i + 1),
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                FloorPage(
+                                                  floorBloc: _floorBloc,
+                                                  libraryBloc:
+                                                  widget.libBloc,
+                                                  id: e.documentID,
+                                                  path: widget.path +
+                                                      '/' +
+                                                      e.documentID +
+                                                      '/subsections',
+                                                )));
+                                  },
+                                ),
+                              ));
+                        })
+                            .values
+                            .toList()
                       ].expand((e) => e).toList(),
                     ));
               },

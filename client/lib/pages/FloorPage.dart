@@ -11,7 +11,10 @@ import 'package:got_space/client/FirebaseClient.dart';
 import 'package:got_space/models/BlocState.dart';
 import 'package:got_space/models/InputEvent.dart';
 import 'package:got_space/pages/SubSectionPage.dart';
+import 'package:got_space/widgets/Heading.dart';
 import 'package:got_space/widgets/InputDialog.dart';
+import 'package:got_space/widgets/RatingWidget.dart';
+import 'package:got_space/widgets/RowWidget.dart';
 
 class FloorPage extends StatefulWidget {
   FloorPage({Key key, this.floorBloc, this.path, this.libraryBloc, this.id})
@@ -49,8 +52,8 @@ class _FloorPageState extends State<FloorPage> {
           return InputDialog(
             path: path,
             formKey: _formKey,
-            height: height*0.25,
-            width: width*0.75,
+            height: height * 0.25,
+            width: width * 0.75,
             rootContext: rootContext,
           );
         });
@@ -74,51 +77,69 @@ class _FloorPageState extends State<FloorPage> {
           return Scaffold(
               appBar: AppBar(
                 title: Text(snapshot.documentID),
+                centerTitle: true,
               ),
               body: Builder(
                 builder: (context) => ListView(
                   children: [
                     [
-                      Center(
-                        child: Text('Rating: ' +
-                            num.parse(snapshot.data['rating'].toString())
-                                .toStringAsFixed(1)),
+                      RatingWidget(e: snapshot),
+                      Divider(
+                        color: Theme.of(context).primaryColor,
                       ),
                       Visibility(
                         visible: !snapshot.data['hasChild'],
-                        child: FlatButton(
-                          child: Text('Submit a rating'),
-                          onPressed: () {
-                            _showInputDialog(snapshot.reference.path, context);
-                          },
-                        ),
-                      )
+                        child: Padding(
+                            padding: EdgeInsets.all(20),
+                            child: ButtonTheme(
+                                buttonColor: Theme.of(context).primaryColor,
+                                child: RaisedButton(
+                                  child: Text(
+                                    'Submit a rating',
+                                    style: TextStyle(
+                                        color: Theme.of(context).backgroundColor),
+                                  ),
+                                  onPressed: () {
+                                    _showInputDialog(
+                                        snapshot.reference.path, context);
+                                  },
+                                ))),
+                      ),
+                      Visibility(
+                          visible: snapshot.data['hasChild'],
+                          child: Heading(
+                            header: 'Subsections',
+                          )),
                     ],
-                    state.subSections.map((e) {
-                      SubSectionBloc _bloc = SubSectionBloc(
-                          FirebaseRepository(FirebaseClient()),
-                          e.documentID,
-                          widget.path);
-                      return BlocProvider<SubSectionBloc>(
-                        create: (context) => _bloc,
-                        child: FlatButton(
-                          child: Text(e.documentID +
-                              ':' +
-                              num.parse(e.data['rating'].toString())
-                                  .toStringAsFixed(1)),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SubSectionPage(
-                                          subSecBloc: _bloc,
-                                          floorBloc: widget.floorBloc,
-                                          id: e.documentID,
-                                        )));
-                          },
-                        ),
-                      );
-                    }).toList()
+                    state.subSections
+                        .asMap()
+                        .map((i, e) {
+                          SubSectionBloc _bloc = SubSectionBloc(
+                              FirebaseRepository(FirebaseClient()),
+                              e.documentID,
+                              widget.path);
+                          return MapEntry(
+                              i,
+                              BlocProvider<SubSectionBloc>(
+                                create: (context) => _bloc,
+                                child: FlatButton(
+                                  child: RowWidget(e: e, i: i + 1),
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SubSectionPage(
+                                                  subSecBloc: _bloc,
+                                                  floorBloc: widget.floorBloc,
+                                                  id: e.documentID,
+                                                )));
+                                  },
+                                ),
+                              ));
+                        })
+                        .values
+                        .toList()
                   ].expand((e) => e).toList(),
                 ),
               ));
