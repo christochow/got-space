@@ -39,6 +39,9 @@ class _InputDialogState extends State<InputDialog> {
           builder: (BuildContext context, String state) {
             InputBloc _bloc = BlocProvider.of<InputBloc>(context);
             return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius:
+                  new BorderRadius.circular(18.0),),
               title: Text('Submit a rating'),
               content: Container(
                 height: widget.height,
