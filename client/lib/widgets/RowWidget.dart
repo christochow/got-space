@@ -6,18 +6,6 @@ class RowWidget extends StatelessWidget {
   final DocumentSnapshot e;
   final int i;
 
-  String _constructDate(DateTime time) {
-    return time.year.toString() +
-        '-' +
-        time.month.toString() +
-        '-' +
-        time.day.toString() +
-        ' ' +
-        time.hour.toString() +
-        ':' +
-        time.minute.toString();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
