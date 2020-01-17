@@ -41,7 +41,7 @@ class _InputDialogState extends State<InputDialog> {
             return AlertDialog(
               shape: RoundedRectangleBorder(
                   borderRadius:
-                  new BorderRadius.circular(18.0),),
+                  new BorderRadius.circular(24.0),),
               title: Text('Submit a rating'),
               content: Container(
                 height: widget.height,
