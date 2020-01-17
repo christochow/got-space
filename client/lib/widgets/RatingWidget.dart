@@ -5,12 +5,25 @@ class RatingWidget extends StatelessWidget {
   RatingWidget({Key key, this.e}) : super(key: key);
   final DocumentSnapshot e;
 
-  String _constructDate(DateTime time){
-    return time.year.toString()+'-'+time.month.toString()+'-'+time.day.toString()+
-        ' '+time.hour.toString()+':'+time.minute.toString();
+  String _constructDate(DateTime time) {
+    return time.year.toString() +
+        '-' +
+        _padZero(time.month) +
+        '-' +
+        _padZero(time.day) +
+        ' ' +
+        _padZero(time.hour) +
+        ':' +
+        _padZero(time.minute);
   }
 
-
+  String _padZero(int num) {
+    if (num < 10) {
+      return '0' + num.toString();
+    } else {
+      return num.toString();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +34,16 @@ class RatingWidget extends StatelessWidget {
         textBaseline: TextBaseline.ideographic,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text('This area\'s rating is ' +
+          Text(
+              'This area\'s rating is ' +
                   num.parse(e.data['rating'].toString()).toStringAsFixed(1),
               style: TextStyle(fontSize: 17)),
           Text(
             ' Last updated: ' +
-                _constructDate(DateTime.fromMillisecondsSinceEpoch(e.data['timestamp'])),
-            style: TextStyle(fontSize: 10),),
+                _constructDate(
+                    DateTime.fromMillisecondsSinceEpoch(e.data['timestamp'])),
+            style: TextStyle(fontSize: 10),
+          ),
         ],
       ),
     );
