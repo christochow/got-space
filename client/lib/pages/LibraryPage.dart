@@ -83,26 +83,34 @@ class _LibraryPageState extends State<LibraryPage> {
                               return MapEntry(
                                   i,
                                   BlocProvider<FloorBloc>(
-                                    create: (context) => _floorBloc,
-                                    child: FlatButton(
-                                      child: RowWidget(e: e, i: i + 1),
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => FloorPage(
-                                                      floorBloc: _floorBloc,
-                                                      libraryBloc:
-                                                          widget.libBloc,
-                                                      id: e.documentID,
-                                                      path: widget.path +
-                                                          '/' +
-                                                          e.documentID +
-                                                          '/subsections',
-                                                    )));
-                                      },
-                                    ),
-                                  ));
+                                      create: (context) => _floorBloc,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                                bottom: BorderSide(
+                                                    width: 0.4,
+                                                    color: Theme.of(context)
+                                                        .backgroundColor))),
+                                        child: FlatButton(
+                                          child: RowWidget(e: e, i: i + 1),
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        FloorPage(
+                                                          floorBloc: _floorBloc,
+                                                          libraryBloc:
+                                                              widget.libBloc,
+                                                          id: e.documentID,
+                                                          path: widget.path +
+                                                              '/' +
+                                                              e.documentID +
+                                                              '/subsections',
+                                                        )));
+                                          },
+                                        ),
+                                      )));
                             })
                             .values
                             .toList()

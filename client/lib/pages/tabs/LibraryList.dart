@@ -33,45 +33,56 @@ class _LibraryListState extends State<LibraryList> {
           );
         }
         return ListView(
-          shrinkWrap: true,
-          children: [
-            [
-              Heading(header: 'Libraries',)
-            ],
-            state.subSections
-              .asMap()
-              .map((i, e) {
-                LibraryBloc _bloc = LibraryBloc(
-                    FirebaseRepository(FirebaseClient()),
-                    e.documentID,
-                    widget.path,
-                    e.data['hasChild']);
-                return MapEntry(
-                    i,
-                    BlocProvider<LibraryBloc>(
-                      create: (context) => _bloc,
-                      child: FlatButton(
-                        child: RowWidget(e: e, i: i+1),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LibraryPage(
-                                      libBloc: _bloc,
-                                      schoolBloc: BlocProvider.of<SchoolBloc>(
-                                          rootContext),
-                                      id: e.documentID,
-                                      path: widget.path +
-                                          '/' +
-                                          e.documentID +
-                                          '/floors')));
-                        },
-                      ),
-                    ));
-              })
-              .values
-              .toList(),].expand((e)=>e).toList()
-        );
+            shrinkWrap: true,
+            children: [
+              [
+                Heading(
+                  header: 'Libraries',
+                )
+              ],
+              state.subSections
+                  .asMap()
+                  .map((i, e) {
+                    LibraryBloc _bloc = LibraryBloc(
+                        FirebaseRepository(FirebaseClient()),
+                        e.documentID,
+                        widget.path,
+                        e.data['hasChild']);
+                    return MapEntry(
+                        i,
+                        BlocProvider<LibraryBloc>(
+                          create: (context) => _bloc,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        width: 0.4,
+                                        color: Theme.of(context)
+                                            .backgroundColor))),
+                            child: FlatButton(
+                              child: RowWidget(e: e, i: i + 1),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LibraryPage(
+                                            libBloc: _bloc,
+                                            schoolBloc:
+                                                BlocProvider.of<SchoolBloc>(
+                                                    rootContext),
+                                            id: e.documentID,
+                                            path: widget.path +
+                                                '/' +
+                                                e.documentID +
+                                                '/floors')));
+                              },
+                            ),
+                          ),
+                        ));
+                  })
+                  .values
+                  .toList(),
+            ].expand((e) => e).toList());
       },
     );
   }
