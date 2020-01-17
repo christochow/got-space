@@ -62,26 +62,29 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget dropDown(List<String> schools) => Column(
-        children: schools.map<Container>((String value) {
-          return Container(
-            child: FlatButton(
-              child: Center(
-                child: Text(
-                  value,
-                  style: TextStyle(
-                      color: Theme.of(context).backgroundColor, fontSize: 17),
+        children: [
+          schools.map<Container>((String value) {
+            return Container(
+              child: FlatButton(
+                child: Center(
+                  child: Text(
+                    value,
+                    style: TextStyle(
+                        color: Theme.of(context).backgroundColor, fontSize: 17),
+                  ),
                 ),
+                onPressed: () {
+                  setState(() {
+                    index = schools.indexOf(value);
+                    expand = false;
+                  });
+                },
               ),
-              onPressed: () {
-                setState(() {
-                  index = schools.indexOf(value);
-                  expand = false;
-                });
-              },
-            ),
-            decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-          );
-        }).toList(),
+              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+            );
+          }).toList(),
+          [Divider(color: Theme.of(context).backgroundColor)]
+        ].expand((e) => e).toList(),
       );
 
   @override
@@ -112,7 +115,11 @@ class _MainPageState extends State<MainPage> {
       List<Widget> widgets = state.map((e) => SchoolTab(id: e)).toList();
       return Scaffold(
           appBar: AppBar(
+            elevation: 0,
             centerTitle: true,
+            bottom: PreferredSize(
+                child: Divider(color: Theme.of(context).backgroundColor),
+                preferredSize: Size.fromHeight(1.0)),
             title: Padding(
                 padding: EdgeInsets.only(left: 35),
                 child: Row(
@@ -142,7 +149,8 @@ class _MainPageState extends State<MainPage> {
                   }
                 },
                 child: Padding(
-                  child: Icon(Icons.more_horiz),
+                  child: Icon(Icons.more_horiz,
+                      color: Theme.of(context).backgroundColor),
                   padding: EdgeInsets.only(right: 10),
                 ),
                 itemBuilder: (BuildContext context) {

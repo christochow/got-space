@@ -41,7 +41,7 @@ class QuestionsAndAnswersPage extends StatelessWidget {
                         child: Text(e.value),
                       ),
                       Divider(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).backgroundColor,
                       ),
                     ],
                   )),

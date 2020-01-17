@@ -53,6 +53,11 @@ class _LibraryPageState extends State<LibraryPage> {
                 }
                 return Scaffold(
                     appBar: AppBar(
+                      elevation: 0,
+                      bottom: PreferredSize(
+                          child:
+                              Divider(color: Theme.of(context).backgroundColor),
+                          preferredSize: Size.fromHeight(1.0)),
                       title: Text(snapshot.documentID),
                       centerTitle: true,
                     ),
@@ -61,45 +66,44 @@ class _LibraryPageState extends State<LibraryPage> {
                         [
                           RatingWidget(e: snapshot),
                           Divider(
-                            color: Theme
-                                .of(context)
-                                .primaryColor,
+                            color: Theme.of(context).backgroundColor,
                           ),
-                          Heading(header: 'Floors',)
+                          Heading(
+                            header: 'Floors',
+                          )
                         ],
                         state.subSections
                             .asMap()
                             .map((i, e) {
-                          FloorBloc _floorBloc = FloorBloc(
-                              FirebaseRepository(FirebaseClient()),
-                              e.documentID,
-                              widget.path,
-                              e.data['hasChild']);
-                          return MapEntry(
-                              i,
-                              BlocProvider<FloorBloc>(
-                                create: (context) => _floorBloc,
-                                child: FlatButton(
-                                  child: RowWidget(e: e, i: i + 1),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                FloorPage(
-                                                  floorBloc: _floorBloc,
-                                                  libraryBloc:
-                                                  widget.libBloc,
-                                                  id: e.documentID,
-                                                  path: widget.path +
-                                                      '/' +
-                                                      e.documentID +
-                                                      '/subsections',
-                                                )));
-                                  },
-                                ),
-                              ));
-                        })
+                              FloorBloc _floorBloc = FloorBloc(
+                                  FirebaseRepository(FirebaseClient()),
+                                  e.documentID,
+                                  widget.path,
+                                  e.data['hasChild']);
+                              return MapEntry(
+                                  i,
+                                  BlocProvider<FloorBloc>(
+                                    create: (context) => _floorBloc,
+                                    child: FlatButton(
+                                      child: RowWidget(e: e, i: i + 1),
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => FloorPage(
+                                                      floorBloc: _floorBloc,
+                                                      libraryBloc:
+                                                          widget.libBloc,
+                                                      id: e.documentID,
+                                                      path: widget.path +
+                                                          '/' +
+                                                          e.documentID +
+                                                          '/subsections',
+                                                    )));
+                                      },
+                                    ),
+                                  ));
+                            })
                             .values
                             .toList()
                       ].expand((e) => e).toList(),

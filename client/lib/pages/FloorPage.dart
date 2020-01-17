@@ -76,6 +76,11 @@ class _FloorPageState extends State<FloorPage> {
           }
           return Scaffold(
               appBar: AppBar(
+                elevation: 0,
+                bottom: PreferredSize(
+                    child: Divider(color: Theme.of(context).backgroundColor),
+                    preferredSize: Size.fromHeight(1.0)),
+                backgroundColor: Colors.white,
                 title: Text(snapshot.documentID),
                 centerTitle: true,
               ),
@@ -85,7 +90,7 @@ class _FloorPageState extends State<FloorPage> {
                     [
                       RatingWidget(e: snapshot),
                       Divider(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).backgroundColor,
                       ),
                       Visibility(
                         visible: !snapshot.data['hasChild'],
@@ -94,10 +99,17 @@ class _FloorPageState extends State<FloorPage> {
                             child: ButtonTheme(
                                 buttonColor: Theme.of(context).primaryColor,
                                 child: RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(18.0),
+                                      side: BorderSide(
+                                          color: Theme.of(context)
+                                              .backgroundColor)),
                                   child: Text(
                                     'Submit a rating',
                                     style: TextStyle(
-                                        color: Theme.of(context).backgroundColor),
+                                        color:
+                                            Theme.of(context).backgroundColor),
                                   ),
                                   onPressed: () {
                                     _showInputDialog(

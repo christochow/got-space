@@ -69,6 +69,10 @@ class _SubSectionPageState extends State<SubSectionPage> {
         }
         return Scaffold(
             appBar: AppBar(
+              elevation: 0,
+              bottom: PreferredSize(
+                  child: Divider(color: Theme.of(context).backgroundColor),
+                  preferredSize: Size.fromHeight(1.0)),
               title: Text(snapshot.documentID),
               centerTitle: true,
             ),
@@ -84,6 +88,12 @@ class _SubSectionPageState extends State<SubSectionPage> {
                           child: ButtonTheme(
                               buttonColor: Theme.of(context).primaryColor,
                               child: RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(18.0),
+                                    side: BorderSide(
+                                        color:
+                                            Theme.of(context).backgroundColor)),
                                 child: Text(
                                   'Submit a rating',
                                   style: TextStyle(
