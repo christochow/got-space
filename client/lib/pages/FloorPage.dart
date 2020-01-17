@@ -123,43 +123,35 @@ class _FloorPageState extends State<FloorPage> {
                             header: 'Subsections',
                           )),
                     ],
-                    state.subSections
-                        .asMap()
-                        .map((i, e) {
-                          SubSectionBloc _bloc = SubSectionBloc(
-                              FirebaseRepository(FirebaseClient()),
-                              e.documentID,
-                              widget.path);
-                          return MapEntry(
-                              i,
-                              BlocProvider<SubSectionBloc>(
-                                  create: (context) => _bloc,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        border: Border(
-                                            bottom: BorderSide(
-                                                width: 0.4,
-                                                color: Theme.of(context)
-                                                    .backgroundColor))),
-                                    child: FlatButton(
-                                      child: RowWidget(e: e, i: i + 1),
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SubSectionPage(
-                                                      subSecBloc: _bloc,
-                                                      floorBloc:
-                                                          widget.floorBloc,
-                                                      id: e.documentID,
-                                                    )));
-                                      },
-                                    ),
-                                  )));
-                        })
-                        .values
-                        .toList()
+                    state.subSections.map((e) {
+                      SubSectionBloc _bloc = SubSectionBloc(
+                          FirebaseRepository(FirebaseClient()),
+                          e.documentID,
+                          widget.path);
+                      return BlocProvider<SubSectionBloc>(
+                          create: (context) => _bloc,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        width: 0.4,
+                                        color: Theme.of(context)
+                                            .backgroundColor))),
+                            child: FlatButton(
+                              child: RowWidget(e: e),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SubSectionPage(
+                                              subSecBloc: _bloc,
+                                              floorBloc: widget.floorBloc,
+                                              id: e.documentID,
+                                            )));
+                              },
+                            ),
+                          ));
+                    }).toList()
                   ].expand((e) => e).toList(),
                 ),
               ));
