@@ -3,17 +3,17 @@ const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
 
-const calSchool = async (name) => {
+const calSchool = async (name, time) => {
     let libraries = await db.collection('records').doc(name).collection('libraries').get();
-    libraries.docs.forEach(e => calcLibraries(e.ref.path));
+    libraries.docs.forEach(e => calcLibraries(e.ref.path, time));
 };
 
-const calcLibraries = async (name) => {
+const calcLibraries = async (name, time) => {
     let floors = await db.doc(name).collection('floors').get();
     let promises = [];
     for (let i = 0; i < floors.docs.length; i++) {
         let e = floors.docs[i];
-        promises.push(calcFloors(e.ref.path, e));
+        promises.push(calcFloors(e.ref.path, e, time));
     }
     await Promise.all(promises);
     name = name.split('/');
@@ -24,19 +24,20 @@ const calcLibraries = async (name) => {
             let s = snapshot.docs.map(e => e.data()['rating']);
             let total = snapshot.docs.length === 0 ? 1 : snapshot.docs.length;
             return db.doc(name).update({
-                rating: Math.round(s.reduce((accu, cur) => accu + cur, 0) * 10 / total) / 10
+                rating: Math.round(s.reduce((accu, cur) => accu + cur, 0) * 10 / total) / 10,
+                timestamp: time
             });
         });
     });
 };
 
-const calcFloors = async (name, snapshot) => {
+const calcFloors = async (name, snapshot, time) => {
     if (snapshot.data()['hasChild'] === true) {
         let subsections = await db.doc(name).collection('subsections').get();
         let promises = [];
         for (let i = 0; i < subsections.docs.length; i++) {
             let e = subsections.docs[i];
-            promises.push(runCalcTransaction(e.ref.path));
+            promises.push(runCalcTransaction(e.ref.path, time));
         }
         //wait for process to finish
         await Promise.all(promises);
@@ -48,16 +49,17 @@ const calcFloors = async (name, snapshot) => {
                 let s = snapshot.docs.map(e => e.data()['rating']);
                 let total = snapshot.docs.length === 0 ? 1 : snapshot.docs.length;
                 return db.doc(name).update({
-                    rating: Math.round(s.reduce((accu, cur) => accu + cur, 0) * 10 / total) / 10
+                    rating: Math.round(s.reduce((accu, cur) => accu + cur, 0) * 10 / total) / 10,
+                    timestamp: time
                 });
             });
         });
     } else {
-        await runCalcTransaction(name);
+        await runCalcTransaction(name, time);
     }
 };
 
-const runCalcTransaction = async (name) => {
+const runCalcTransaction = async (name, time) => {
     let date = Date.now() - 60 * 60 * 1000;
     await db.runTransaction(t => {
         return t.get(db.doc(name).collection('records').where('timestamp', '>=', date)
@@ -68,7 +70,8 @@ const runCalcTransaction = async (name) => {
             name[0] = 'ratings';
             name = name.join('/');
             return db.doc(name).update({
-                rating: Math.round(s.reduce((accu, cur) => accu + cur, 0) * 10 / total) / 10
+                rating: Math.round(s.reduce((accu, cur) => accu + cur, 0) * 10 / total) / 10,
+                timestamp: time
             });
         });
     });
@@ -123,8 +126,9 @@ const runDelTransaction = async (name) => {
 startCalculate = async () => {
     const data = await db.collection('schools').get();
     let promises = [];
+    let time = Date.now();
     for(let i=0;i<data.docs.length;i++){
-        promises.push(calSchool(data.docs[i].id))
+        promises.push(calSchool(data.docs[i].id, time))
     }
     await Promise.all(promises);
 };
@@ -132,8 +136,9 @@ startCalculate = async () => {
 startDelete = async () => {
     const data = await db.collection('schools').get();
     let promises = [];
+    let time = Date.now();
     for(let i=0;i<data.docs.length;i++){
-        promises.push(delSchoolRecords(data.docs[i].id))
+        promises.push(delSchoolRecords(data.docs[i].id, time))
     }
     await Promise.all(promises);
 };
