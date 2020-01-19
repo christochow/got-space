@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class AppBarWidget extends StatelessWidget implements PreferredSizeWidget{
+class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   AppBarWidget({Key key, this.header}) : super(key: key);
   final String header;
 
@@ -17,6 +17,13 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget{
           preferredSize: Size.fromHeight(1.0)),
       title: Text(header),
       centerTitle: true,
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.home, color: Theme.of(context).backgroundColor),
+          onPressed: () =>
+              Navigator.of(context).popUntil((route) => route.isFirst),
+        )
+      ],
     );
   }
 }
