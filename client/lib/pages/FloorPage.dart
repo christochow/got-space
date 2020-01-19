@@ -11,6 +11,7 @@ import 'package:got_space/client/FirebaseClient.dart';
 import 'package:got_space/models/BlocState.dart';
 import 'package:got_space/models/InputEvent.dart';
 import 'package:got_space/pages/SubSectionPage.dart';
+import 'package:got_space/widgets/AppBarWidget.dart';
 import 'package:got_space/widgets/Heading.dart';
 import 'package:got_space/widgets/InputDialog.dart';
 import 'package:got_space/widgets/RatingWidget.dart';
@@ -75,15 +76,7 @@ class _FloorPageState extends State<FloorPage> {
             );
           }
           return Scaffold(
-              appBar: AppBar(
-                elevation: 0,
-                bottom: PreferredSize(
-                    child: Divider(color: Theme.of(context).backgroundColor),
-                    preferredSize: Size.fromHeight(1.0)),
-                backgroundColor: Colors.white,
-                title: Text(snapshot.documentID),
-                centerTitle: true,
-              ),
+              appBar: AppBarWidget(header: snapshot.documentID,),
               body: Builder(
                 builder: (context) => ListView(
                   children: [

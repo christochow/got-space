@@ -9,6 +9,7 @@ import 'package:got_space/bloc/SubSectionBloc.dart';
 import 'package:got_space/client/FirebaseClient.dart';
 import 'package:got_space/models/BlocState.dart';
 import 'package:got_space/models/InputEvent.dart';
+import 'package:got_space/widgets/AppBarWidget.dart';
 import 'package:got_space/widgets/InputDialog.dart';
 import 'package:got_space/widgets/RatingWidget.dart';
 import 'package:got_space/widgets/RowWidget.dart';
@@ -68,14 +69,7 @@ class _SubSectionPageState extends State<SubSectionPage> {
           );
         }
         return Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              bottom: PreferredSize(
-                  child: Divider(color: Theme.of(context).backgroundColor),
-                  preferredSize: Size.fromHeight(1.0)),
-              title: Text(snapshot.documentID),
-              centerTitle: true,
-            ),
+            appBar: AppBarWidget(header: snapshot.documentID,),
             body: Builder(
                 builder: (context) => ListView(
                       children: <Widget>[
