@@ -13,11 +13,11 @@ class LibraryBloc extends Bloc<BlocEvent, BlocState> {
   LibraryBloc(FirebaseRepository repo, String id, String path, bool hasChild) {
     _firebaseRepository = repo;
     if(hasChild == true){
-      subscribetoSub(path, id);
+      subscribeToSub(path, id);
     }
   }
 
-  void subscribetoSub(String path, String id){
+  void subscribeToSub(String path, String id){
     _subscription2 = _firebaseRepository
         .getFloorCollectionFromPath(path, id + '/floors')
         .listen((snapshot) {

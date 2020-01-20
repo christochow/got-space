@@ -13,11 +13,11 @@ class FloorBloc extends Bloc<BlocEvent, BlocState> {
   FloorBloc(FirebaseRepository repo, String id, String path, bool hasChild) {
     _firebaseRepository = repo;
     if(hasChild==true){
-      _subscribetoSub(path, id);
+      _subscribeToSub(path, id);
     }
   }
 
-  void _subscribetoSub(String path, String id){
+  void _subscribeToSub(String path, String id){
     _subscription2 = _firebaseRepository
         .getCollectionFromPath(path, id + '/subsections')
         .listen((snapshot) {
