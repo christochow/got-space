@@ -19,7 +19,7 @@ class LibraryBloc extends Bloc<BlocEvent, BlocState> {
 
   void subscribetoSub(String path, String id){
     _subscription2 = _firebaseRepository
-        .getCollectionFromPath(path, id + '/floors')
+        .getFloorCollectionFromPath(path, id + '/floors')
         .listen((snapshot) {
       this.add(BlocEvent(BlocEventType.SUB, null, snapshot.documents));
     });

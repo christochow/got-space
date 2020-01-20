@@ -13,6 +13,10 @@ class FirebaseClient {
     return Firestore.instance.collection(id).snapshots();
   }
 
+  Stream<QuerySnapshot> getFloors(String id) {
+    return Firestore.instance.collection(id).orderBy('order').snapshots();
+  }
+
   Future<DocumentReference> addToCollection(String path, Map<String, dynamic> data){
     return Firestore.instance.collection(path).add(data);
   }

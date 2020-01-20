@@ -26,6 +26,10 @@ class FirebaseRepository {
     return _firebaseClient.getSubSections(path + '/' + id);
   }
 
+  Stream<QuerySnapshot> getFloorCollectionFromPath(String path, String id) {
+    return _firebaseClient.getFloors(path + '/' + id);
+  }
+
   Future<DocumentReference> addToCollection(String path, Map<String, dynamic> data){
     return _firebaseClient.addToCollection(path, data);
   }
