@@ -32,6 +32,11 @@ class _LibraryListState extends State<LibraryList> {
             child: Text('Loading'),
           );
         }
+        if(state.hasError){
+          return Center(
+            child: Text('Something went wrong, please try again'),
+          );
+        }
         return ListView(
             shrinkWrap: true,
             children: [

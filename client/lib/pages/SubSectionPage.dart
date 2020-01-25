@@ -68,6 +68,11 @@ class _SubSectionPageState extends State<SubSectionPage> {
             child: Text('Loading'),
           );
         }
+        if(state.hasError){
+          return Center(
+            child: Text('Something went wrong, please try again'),
+          );
+        }
         return Scaffold(
             appBar: AppBarWidget(header: snapshot.documentID,),
             body: Builder(

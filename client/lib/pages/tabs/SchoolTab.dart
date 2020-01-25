@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:got_space/Repositories/FirebaseRepository.dart';
 import 'package:got_space/bloc/SchoolBloc.dart';
 import 'package:got_space/client/FirebaseClient.dart';
-import 'package:got_space/pages/tabs/LibraryList.dart';
+import 'package:got_space/widgets/LibraryList.dart';
 
 class SchoolTab extends StatefulWidget {
   SchoolTab({Key key, this.id}) : super(key: key);

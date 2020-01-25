@@ -52,6 +52,11 @@ class _LibraryPageState extends State<LibraryPage> {
                     child: Text('Loading'),
                   );
                 }
+                if(state.hasError){
+                  return Center(
+                    child: Text('Something went wrong, please try again'),
+                  );
+                }
                 return Scaffold(
                     appBar: AppBarWidget(header: snapshot.documentID,),
                     body: ListView(
