@@ -12,28 +12,30 @@ class LibraryBloc extends Bloc<BlocEvent, BlocState> {
 
   LibraryBloc(FirebaseRepository repo, String id, String path, bool hasChild) {
     _firebaseRepository = repo;
-    if(hasChild == true){
+    if (hasChild == true) {
       subscribeToSub(path, id);
     }
   }
 
-  void subscribeToSub(String path, String id){
+  void subscribeToSub(String path, String id) {
     _subscription2 = _firebaseRepository
         .getFloorCollectionFromPath(path, id + '/floors')
         .listen((snapshot) {
-      this.add(BlocEvent(BlocEventType.SUB, null, snapshot.documents));
+      this.add(BlocEvent(BlocEventType.SUB, null, snapshot.documents, false));
     });
+    _subscription2
+        .onError(() => this.add(BlocEvent(BlocEventType.SUB, null, [], true)));
   }
 
   @override
-  BlocState get initialState => BlocState(null, []);
+  BlocState get initialState => BlocState(null, [], false);
 
   @override
   Stream<BlocState> mapEventToState(BlocEvent event) async* {
     if (event.type == BlocEventType.ADD) {
-      yield BlocState(event.snapshot, state.subSections);
+      yield BlocState(event.snapshot, state.subSections, event.hasError);
     } else if (event.type == BlocEventType.SUB) {
-      yield BlocState(state.snapshot, event.subSections);
+      yield BlocState(state.snapshot, event.subSections, event.hasError);
     }
   }
 

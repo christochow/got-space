@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:got_space/Repositories/FirebaseRepository.dart';
@@ -15,26 +16,30 @@ class SchoolBloc extends Bloc<BlocEvent, BlocState> {
     _firebaseRepository = repo;
     _subscription =
         _firebaseRepository.getDataFromPath(path, id).listen((snapshot) {
-      this.add(BlocEvent(BlocEventType.ADD, snapshot, null));
+      this.add(BlocEvent(BlocEventType.ADD, snapshot, [], false));
     });
+    _subscription
+        .onError(() => this.add(BlocEvent(BlocEventType.SUB, null, [], true)));
     _subscription2 = _firebaseRepository
         .getCollectionFromPath(path, id + '/libraries')
         .listen((snapshot) {
-      this.add(BlocEvent(BlocEventType.SUB, null, snapshot.documents));
+      this.add(BlocEvent(BlocEventType.SUB, null, snapshot.documents, false));
     });
+    _subscription2
+        .onError(() => this.add(BlocEvent(BlocEventType.SUB, null, [], true)));
   }
 
   StreamSubscription get subscription => _subscription;
 
   @override
-  BlocState get initialState => BlocState(null, []);
+  BlocState get initialState => BlocState(null, [], false);
 
   @override
   Stream<BlocState> mapEventToState(BlocEvent event) async* {
     if (event.type == BlocEventType.ADD) {
-      yield BlocState(event.snapshot, state.subSections);
+      yield BlocState(event.snapshot, state.subSections, event.hasError);
     } else if (event.type == BlocEventType.SUB) {
-      yield BlocState(state.snapshot, event.subSections);
+      yield BlocState(state.snapshot, event.subSections, event.hasError);
     }
   }
 

@@ -15,12 +15,12 @@ class SubSectionBloc extends Bloc<BlocEvent, BlocState> {
 
 
   @override
-  BlocState get initialState => BlocState(null, []);
+  BlocState get initialState => BlocState(null, [], false);
 
   @override
   Stream<BlocState> mapEventToState(BlocEvent event) async* {
     if (event.type == BlocEventType.ADD) {
-      yield BlocState(event.snapshot, state.subSections);
+      yield BlocState(event.snapshot, state.subSections, event.hasError);
     }
   }
 
