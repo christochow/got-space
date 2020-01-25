@@ -24,7 +24,7 @@ class FloorBloc extends Bloc<BlocEvent, BlocState> {
       this.add(BlocEvent(BlocEventType.SUB, null, snapshot.documents,false));
     });
     _subscription2
-        .onError(() => this.add(BlocEvent(BlocEventType.SUB, null, [], true)));
+        .onError((e) => this.add(BlocEvent(BlocEventType.SUB, null, [], true)));
   }
 
   @override

@@ -19,14 +19,14 @@ class SchoolBloc extends Bloc<BlocEvent, BlocState> {
       this.add(BlocEvent(BlocEventType.ADD, snapshot, [], false));
     });
     _subscription
-        .onError(() => this.add(BlocEvent(BlocEventType.SUB, null, [], true)));
+        .onError((e) => this.add(BlocEvent(BlocEventType.SUB, null, [], true)));
     _subscription2 = _firebaseRepository
         .getCollectionFromPath(path, id + '/libraries')
         .listen((snapshot) {
       this.add(BlocEvent(BlocEventType.SUB, null, snapshot.documents, false));
     });
     _subscription2
-        .onError(() => this.add(BlocEvent(BlocEventType.SUB, null, [], true)));
+        .onError((e) => this.add(BlocEvent(BlocEventType.SUB, null, [], true)));
   }
 
   StreamSubscription get subscription => _subscription;
