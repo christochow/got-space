@@ -143,16 +143,6 @@ startDelete = async () => {
     await Promise.all(promises);
 };
 
-exports.calcSchools = functions.https.onRequest(async (request, response) => {
-    await startCalculate();
-    response.send('calculate ratings done');
-});
-
-exports.delSchools = functions.https.onRequest(async (request, response) => {
-    await startDelete();
-    response.send('delete old records done')
-});
-
 exports.updateRatings = functions.pubsub
     .schedule('*/15 * * * *')
     .timeZone('America/New_York')
