@@ -19,8 +19,8 @@ class _DefaultSchoolPageState extends State<DefaultSchoolPage> {
       body: ListView(
         children: widget.schools
             .map((e) => FlatButton(
-                  child:
-                      Text(e + (e == widget.school ? " -- current default" : '')),
+                  child: Text(
+                      e + (e == widget.school ? " -- current default" : '')),
                   onPressed: () {
                     Navigator.pop(context, e);
                   },

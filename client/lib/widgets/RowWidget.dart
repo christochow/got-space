@@ -12,7 +12,7 @@ class RowWidget extends StatelessWidget {
         child: SizedBox(
           width: double.infinity,
           child: Text(
-                  e.documentID +
+              e.documentID +
                   ': ' +
                   num.parse(e.data['rating'].toString()).toStringAsFixed(1),
               textAlign: TextAlign.start,

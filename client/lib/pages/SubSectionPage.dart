@@ -1,23 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:got_space/Repositories/FirebaseRepository.dart';
 import 'package:got_space/bloc/FloorBloc.dart';
-import 'package:got_space/bloc/InputBloc.dart';
-import 'package:got_space/bloc/SubSectionBloc.dart';
-import 'package:got_space/client/FirebaseClient.dart';
 import 'package:got_space/models/BlocState.dart';
-import 'package:got_space/models/InputEvent.dart';
 import 'package:got_space/widgets/AppBarWidget.dart';
 import 'package:got_space/widgets/InputDialog.dart';
 import 'package:got_space/widgets/RatingWidget.dart';
-import 'package:got_space/widgets/RowWidget.dart';
 
 class SubSectionPage extends StatefulWidget {
-  SubSectionPage({Key key, this.subSecBloc, this.floorBloc, this.id})
-      : super(key: key);
-  final SubSectionBloc subSecBloc;
+  SubSectionPage({Key key, this.floorBloc, this.id}) : super(key: key);
   final FloorBloc floorBloc;
   final String id;
 
@@ -35,7 +26,6 @@ class _SubSectionPageState extends State<SubSectionPage> {
 
   @override
   void dispose() {
-    widget.subSecBloc.close();
     super.dispose();
   }
 
@@ -68,13 +58,15 @@ class _SubSectionPageState extends State<SubSectionPage> {
             child: Text('Loading'),
           );
         }
-        if(state.hasError){
+        if (state.hasError) {
           return Center(
             child: Text('Something went wrong, please try again'),
           );
         }
         return Scaffold(
-            appBar: AppBarWidget(header: snapshot.documentID,),
+            appBar: AppBarWidget(
+              header: snapshot.documentID,
+            ),
             body: Builder(
                 builder: (context) => ListView(
                       children: <Widget>[

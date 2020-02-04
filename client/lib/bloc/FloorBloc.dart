@@ -21,7 +21,7 @@ class FloorBloc extends Bloc<BlocEvent, BlocState> {
     _subscription2 = _firebaseRepository
         .getCollectionFromPath(path, id + '/subsections')
         .listen((snapshot) {
-      this.add(BlocEvent(BlocEventType.SUB, null, snapshot.documents,false));
+      this.add(BlocEvent(BlocEventType.SUB, null, snapshot.documents, false));
     });
     _subscription2
         .onError((e) => this.add(BlocEvent(BlocEventType.SUB, null, [], true)));
