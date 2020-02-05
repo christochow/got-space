@@ -144,7 +144,7 @@ startDelete = async () => {
 };
 
 exports.updateRatings = functions.pubsub
-    .schedule('*/15 * * * *')
+    .schedule('*/5 * * * *')
     .timeZone('America/New_York')
     .onRun(startCalculate);
 
