@@ -13,7 +13,7 @@ class RowWidget extends StatelessWidget {
           width: double.infinity,
           child: Text(
                   e.documentID +
-                  ': ' +
+                  '\'s vacancy rating: ' +
                   num.parse(e.data['rating'].toString()).toStringAsFixed(1),
               textAlign: TextAlign.start,
               style: TextStyle(fontSize: 15)),
