@@ -11,9 +11,8 @@ class RowWidget extends StatelessWidget {
         padding: EdgeInsets.only(top: 5, bottom: 5, left: 5),
         child: SizedBox(
           width: double.infinity,
-          child: Text(
-                  e.documentID +
-                  '\'s vacancy rating: ' +
+          child: Text(e.documentID +
+                  ': ' +
                   num.parse(e.data['rating'].toString()).toStringAsFixed(1),
               textAlign: TextAlign.start,
               style: TextStyle(fontSize: 15)),

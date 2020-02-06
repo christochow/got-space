@@ -37,7 +37,8 @@ class QuestionsAndAnswersPage extends StatelessWidget {
                         padding: EdgeInsets.all(5),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 10, right: 10, bottom: 7),
+                        padding:
+                            EdgeInsets.only(left: 10, right: 10, bottom: 7),
                         child: Text(e.value),
                       ),
                       Divider(

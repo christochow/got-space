@@ -5,8 +5,7 @@ class BlocState {
   List<DocumentSnapshot> _subSections;
   bool _hasError;
 
-  BlocState(DocumentSnapshot snapshot,
-      List<DocumentSnapshot> subSections,
+  BlocState(DocumentSnapshot snapshot, List<DocumentSnapshot> subSections,
       bool hasError) {
     _snapshot = snapshot;
     _subSections = subSections;

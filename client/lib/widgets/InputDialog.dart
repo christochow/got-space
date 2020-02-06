@@ -27,7 +27,10 @@ class InputDialog extends StatefulWidget {
 
 class _InputDialogState extends State<InputDialog> {
   _displaySnackBar(BuildContext context, String msg) {
-    final snackBar = SnackBar(content: Text(msg),duration: Duration(seconds: 1),);
+    final snackBar = SnackBar(
+      content: Text(msg),
+      duration: Duration(seconds: 1),
+    );
     Scaffold.of(context).showSnackBar(snackBar);
   }
 
@@ -40,8 +43,8 @@ class _InputDialogState extends State<InputDialog> {
             InputBloc _bloc = BlocProvider.of<InputBloc>(context);
             return AlertDialog(
               shape: RoundedRectangleBorder(
-                  borderRadius:
-                  new BorderRadius.circular(24.0),),
+                borderRadius: new BorderRadius.circular(24.0),
+              ),
               title: Text('Submit a rating'),
               content: Container(
                 height: widget.height,

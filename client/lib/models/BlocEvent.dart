@@ -7,10 +7,8 @@ class BlocEvent {
   List<DocumentSnapshot> _subSections;
   bool _hasError;
 
-  BlocEvent(BlocEventType type,
-      DocumentSnapshot snapshot,
-      List<DocumentSnapshot> list,
-      bool hasError) {
+  BlocEvent(BlocEventType type, DocumentSnapshot snapshot,
+      List<DocumentSnapshot> list, bool hasError) {
     _type = type;
     _snapshot = snapshot;
     _subSections = list;
