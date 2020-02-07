@@ -114,7 +114,7 @@ class _FloorPageState extends State<FloorPage> {
                       Visibility(
                           visible: snapshot.data['hasChild'],
                           child: Heading(
-                            header: 'Subsections',
+                            header: 'Subsection vacancy ratings',
                           )),
                     ],
                     state.subSections.map((e) {

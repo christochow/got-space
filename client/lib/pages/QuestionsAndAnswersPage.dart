@@ -7,7 +7,7 @@ class QuestionsAndAnswersPage extends StatelessWidget {
         'the average of user submitted records of the floor, ' +
         'or the average of it\s subsections if they exist; Ratings for ' +
         'subsections are the average of user submitted records of the subsection',
-    'What does the ratings mean': 'Ratings are scaled from 0 to 10, where ' +
+    'What do the ratings mean': 'Ratings are scaled from 0 to 10, where ' +
         '0 means there are no one in the area, 10 means the area is full.',
     'How often are data updated?': 'Ratings are auto updated every 5 minutes.'
   };

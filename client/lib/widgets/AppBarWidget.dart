@@ -6,30 +6,30 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String header;
 
   _showInputDialog(BuildContext rootContext) {
-    Size size = MediaQuery.of(rootContext).size;
-    double height = size.height;
-    double width = size.width;
-    return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius:
-        new BorderRadius.circular(24.0),),
-      title: Text('What do the ratings mean?'),
-      content: Container(
-        height: height,
-        width: width,
-        child: Text('Ratings are scaled from 0 to 10, where ' +
-            '0 means there are no one in the area, 10 means the area is full.',)
-      ),
-      actions: <Widget>[
-        FlatButton(
-            child: new Text('Got it'),
-            onPressed: () {
-              Navigator.of(rootContext).pop();
-            })
-      ],
-    );
+    showDialog(
+        context: rootContext,
+        builder: (parentCtx) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(24.0),
+            ),
+            title: Text('What do the ratings mean?'),
+            content: Container(
+                child: Text(
+                  'Ratings are scaled from 0 to 10, where ' +
+                      '0 means there are no one in the area, ' +
+                      '10 means the area is full.',
+                )),
+            actions: <Widget>[
+              FlatButton(
+                  child: new Text('Got it'),
+                  onPressed: () {
+                    Navigator.of(parentCtx).pop();
+                  })
+            ],
+          );
+        });
   }
-
 
   @override
   Size get preferredSize => new Size.fromHeight(kToolbarHeight);
@@ -45,14 +45,15 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       actions: <Widget>[
         IconButton(
-          icon: Icon(Icons.help_outline, color: Theme.of(context).backgroundColor),
-          onPressed: ()=>_showInputDialog(context),
-        ),
-        IconButton(
           icon: Icon(Icons.home, color: Theme.of(context).backgroundColor),
           onPressed: () =>
               Navigator.of(context).popUntil((route) => route.isFirst),
-        )
+        ),
+        IconButton(
+          icon: Icon(Icons.help_outline,
+              color: Theme.of(context).backgroundColor),
+          onPressed: () => _showInputDialog(context),
+        ),
       ],
     );
   }

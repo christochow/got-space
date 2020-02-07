@@ -69,7 +69,7 @@ class _LibraryPageState extends State<LibraryPage> {
                             color: Theme.of(context).backgroundColor,
                           ),
                           Heading(
-                            header: 'Floors',
+                            header: 'Floor vacancy ratings',
                           )
                         ],
                         state.subSections.map((e) {

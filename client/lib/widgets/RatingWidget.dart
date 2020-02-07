@@ -35,7 +35,7 @@ class RatingWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-              'This area\'s vacancy rating is ' +
+              'Vacancy Rating : ' +
                   num.parse(e.data['rating'].toString()).toStringAsFixed(1),
               style: TextStyle(fontSize: 17)),
           Text(
