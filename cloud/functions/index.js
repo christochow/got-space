@@ -1,7 +1,9 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const grpc = require('grpc');
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
+db.settings({grpc});
 
 const calSchool = async (name, time) => {
     let libraries = await db.collection('records').doc(name).collection('libraries').get();
@@ -110,8 +112,8 @@ const delFloorRecords = async (name, snapshot) => {
 const runDelTransaction = async (name) => {
     let date = Date.now() - 60 * 60 * 1000;
     let snapshot = await db.doc(name).collection('records').where('timestamp', '<', date).get();
-    if(snapshot.size===0){
-     return;
+    if (snapshot.size === 0) {
+        return;
     }
     let batch = db.batch();
     snapshot.docs.forEach((doc) => {
@@ -127,7 +129,7 @@ startCalculate = async () => {
     const data = await db.collection('schools').get();
     let promises = [];
     let time = Date.now();
-    for(let i=0;i<data.docs.length;i++){
+    for (let i = 0; i < data.docs.length; i++) {
         promises.push(calSchool(data.docs[i].id, time))
     }
     await Promise.all(promises);
@@ -137,7 +139,7 @@ startDelete = async () => {
     const data = await db.collection('schools').get();
     let promises = [];
     let time = Date.now();
-    for(let i=0;i<data.docs.length;i++){
+    for (let i = 0; i < data.docs.length; i++) {
         promises.push(delSchoolRecords(data.docs[i].id, time))
     }
     await Promise.all(promises);
