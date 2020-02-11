@@ -25,7 +25,7 @@ const calcLibraries = async (name, time) => {
         return t.get(db.doc(name).collection('floors')).then(snapshot => {
             let s = snapshot.docs.map(e => e.data()['rating']);
             let total = snapshot.docs.length === 0 ? 1 : snapshot.docs.length;
-            return db.doc(name).update({
+            return t.update(db.doc(name),{
                 rating: Math.round(s.reduce((accu, cur) => accu + cur, 0) * 10 / total) / 10,
                 timestamp: time
             });
@@ -50,7 +50,7 @@ const calcFloors = async (name, snapshot, time) => {
             return t.get(db.doc(name).collection('subsections')).then(snapshot => {
                 let s = snapshot.docs.map(e => e.data()['rating']);
                 let total = snapshot.docs.length === 0 ? 1 : snapshot.docs.length;
-                return db.doc(name).update({
+                return t.update(db.doc(name),{
                     rating: Math.round(s.reduce((accu, cur) => accu + cur, 0) * 10 / total) / 10,
                     timestamp: time
                 });
@@ -71,7 +71,7 @@ const runCalcTransaction = async (name, time) => {
             name = name.split('/');
             name[0] = 'ratings';
             name = name.join('/');
-            return db.doc(name).update({
+            return t.update(db.doc(name),{
                 rating: Math.round(s.reduce((accu, cur) => accu + cur, 0) * 10 / total) / 10,
                 timestamp: time
             });
