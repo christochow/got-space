@@ -39,7 +39,7 @@ class Heading extends StatelessWidget {
             child: Row(mainAxisSize: MainAxisSize.min, children: [
             Text(
               header,
-              style: TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: 18),
             ),
             IconButton(
               icon: Icon(
@@ -54,7 +54,7 @@ class Heading extends StatelessWidget {
             child: Center(
                 child: Text(
               header,
-              style: TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: 18),
             )),
           );
   }

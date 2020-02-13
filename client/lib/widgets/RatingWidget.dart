@@ -37,12 +37,12 @@ class RatingWidget extends StatelessWidget {
           Text(
               'Crowdedness Rating : ' +
                   num.parse(e.data['rating'].toString()).toStringAsFixed(1),
-              style: TextStyle(fontSize: 17)),
+              style: TextStyle(fontSize: 16)),
           Text(
             ' Last updated: ' +
                 _constructDate(
                     DateTime.fromMillisecondsSinceEpoch(e.data['timestamp'])),
-            style: TextStyle(fontSize: 10),
+            style: TextStyle(fontSize: 9),
           ),
         ],
       ),
