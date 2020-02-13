@@ -35,10 +35,8 @@ class Heading extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return this.header.contains("Library")
-        ? Row(children: [
-            Padding(
-              padding: EdgeInsets.only(left: width * 0.15),
-            ),
+        ? Center(
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
             Text(
               header,
               style: TextStyle(fontSize: 20),
@@ -50,7 +48,7 @@ class Heading extends StatelessWidget {
               ),
               onPressed: () => _showDialog(context),
             ),
-          ])
+          ]))
         : Padding(
             padding: EdgeInsets.only(top: 10, bottom: 10),
             child: Center(
