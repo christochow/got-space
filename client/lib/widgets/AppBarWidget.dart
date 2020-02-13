@@ -5,7 +5,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   AppBarWidget({Key key, this.header}) : super(key: key);
   final String header;
 
-  _showInputDialog(BuildContext rootContext) {
+  _showDialog(BuildContext rootContext) {
     showDialog(
         context: rootContext,
         builder: (parentCtx) {
@@ -52,7 +52,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         IconButton(
           icon: Icon(Icons.help_outline,
               color: Theme.of(context).backgroundColor),
-          onPressed: () => _showInputDialog(context),
+          onPressed: () => _showDialog(context),
         ),
       ],
     );

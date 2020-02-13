@@ -42,7 +42,7 @@ class _LibraryListState extends State<LibraryList> {
             children: [
               [
                 Heading(
-                  header: 'Library vacancy ratings',
+                  header: 'Library crowdiness ratings',
                 )
               ],
               state.subSections.map((e) {
