@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:got_space/Repositories/FirebaseRepository.dart';
 import 'package:got_space/bloc/FloorBloc.dart';
+import 'package:got_space/bloc/InputBloc.dart';
+import 'package:got_space/client/FirebaseClient.dart';
 import 'package:got_space/models/BlocState.dart';
 import 'package:got_space/widgets/AppBarWidget.dart';
 import 'package:got_space/widgets/InputDialog.dart';
@@ -42,8 +45,45 @@ class _SubSectionPageState extends State<SubSectionPage> {
             height: height * 0.25,
             width: width * 0.75,
             rootContext: rootContext,
+            bloc: BlocProvider.of<InputBloc>(rootContext),
           );
         });
+  }
+
+  Widget _mainWidget(
+      BuildContext context, BlocState state, DocumentSnapshot snapshot) {
+    return ListView(
+      children: <Widget>[
+        Center(
+            child: RatingWidget(
+          e: snapshot,
+        )),
+        Padding(
+          padding: EdgeInsets.all(20),
+          child: ButtonTheme(
+              buttonColor: Theme.of(context).primaryColor,
+              child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(18.0),
+                    side: BorderSide(color: Theme.of(context).backgroundColor)),
+                child: Text(
+                  'Submit a rating',
+                  style: TextStyle(color: Theme.of(context).backgroundColor),
+                ),
+                onPressed: () =>
+                    _showInputDialog(snapshot.reference.path, context),
+              )),
+        ),
+      ],
+    );
+  }
+
+  _displaySnackBar(BuildContext context, String msg) {
+    final snackBar = SnackBar(
+      content: Text(msg),
+      duration: Duration(seconds: 1),
+    );
+    Scaffold.of(context).showSnackBar(snackBar);
   }
 
   @override
@@ -67,35 +107,18 @@ class _SubSectionPageState extends State<SubSectionPage> {
             appBar: AppBarWidget(
               header: snapshot.documentID,
             ),
-            body: Builder(
-                builder: (context) => ListView(
-                      children: <Widget>[
-                        Center(
-                            child: RatingWidget(
-                          e: snapshot,
-                        )),
-                        Padding(
-                          padding: EdgeInsets.all(20),
-                          child: ButtonTheme(
-                              buttonColor: Theme.of(context).primaryColor,
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(18.0),
-                                    side: BorderSide(
-                                        color:
-                                            Theme.of(context).backgroundColor)),
-                                child: Text(
-                                  'Submit a rating',
-                                  style: TextStyle(
-                                      color: Theme.of(context).backgroundColor),
-                                ),
-                                onPressed: () => _showInputDialog(
-                                    snapshot.reference.path, context),
-                              )),
-                        ),
-                      ],
-                    )));
+            body: BlocProvider<InputBloc>(
+                create: (context) =>
+                    InputBloc(FirebaseRepository(FirebaseClient())),
+                child: Builder(
+                    builder: (context) => BlocListener<InputBloc, String>(
+                          listener: (context, state) {
+                            if (state != '') {
+                              _displaySnackBar(context, state);
+                            }
+                          },
+                          child: _mainWidget(context, state, snapshot),
+                        ))));
       },
     );
   }
